@@ -12,7 +12,7 @@ Here are some resources to get you started! If you find any challenges from this
 
 There are a few services you'll need in order to get this project off the ground:
 
-* AWS CloudFormation - this service allows you to configure CloudOut via a template
+* AWS CloudFormation - this service allows you to configure cloud native protection via a template
 * Rubrik Polaris - the platform that protects provisioned workloads
 
 # :muscle: How You Can Help
