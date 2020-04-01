@@ -1,1 +1,1 @@
-# use-case-aws-cloudformation-templates
+# CloudFormation Templates for Amazon Web Services (AWS)
