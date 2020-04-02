@@ -1,0 +1,224 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This template creates/updates a cross account role.",
+  "Mappings": {
+    "regionTopicMap": {
+      "ap-northeast-1": {
+        "TopicArn": "arn:aws:sns:ap-northeast-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+        "TopicArn": "arn:aws:sns:ap-northeast-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-south-1": {
+        "TopicArn": "arn:aws:sns:ap-south-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-southeast-1": {
+        "TopicArn": "arn:aws:sns:ap-southeast-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-southeast-2": {
+        "TopicArn": "arn:aws:sns:ap-southeast-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ca-central-1": {
+        "TopicArn": "arn:aws:sns:ca-central-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-central-1": {
+        "TopicArn": "arn:aws:sns:eu-central-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-north-1": {
+        "TopicArn": "arn:aws:sns:eu-north-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-1": {
+        "TopicArn": "arn:aws:sns:eu-west-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-2": {
+        "TopicArn": "arn:aws:sns:eu-west-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-3": {
+        "TopicArn": "arn:aws:sns:eu-west-3:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "sa-east-1": {
+        "TopicArn": "arn:aws:sns:sa-east-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-east-1": {
+        "TopicArn": "arn:aws:sns:us-east-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-east-2": {
+        "TopicArn": "arn:aws:sns:us-east-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-west-1": {
+        "TopicArn": "arn:aws:sns:us-west-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-west-2": {
+        "TopicArn": "arn:aws:sns:us-west-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  "Outputs": {
+    "RoleARN": {
+      "Description": "Cross account role ARN used by Rubrik to access feature specific resources.",
+      "Value": {
+        "Fn::GetAtt": [
+          "CrossAccountRole",
+          "Arn"
+        ]
+      }
+    },
+    "StackARN": {
+      "Description": "The ARN of the stack created as a result of this cloud formation script",
+      "Value": {
+        "Ref": "AWS::StackId"
+      }
+    }
+  },
+  "Resources": {
+    "CrossAccountRole": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "000000000000"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::000000000000:user/rubrik-se-beta-a4dc3"
+              }
+            },
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "backup.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeVpcs",
+                    "ec2:DescribeSecurityGroups",
+                    "ec2:DescribeAvailabilityZones",
+                    "rds:DescribeDBInstances",
+                    "rds:DescribeDBSnapshots",
+                    "rds:CreateDBSnapshot",
+                    "rds:DeleteDBSnapshot",
+                    "rds:ModifyDBInstance",
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey",
+                    "kms:GenerateDataKeyWithoutPlaintext",
+                    "kms:ListAliases",
+                    "kms:ListKeys",
+                    "kms:ReEncryptFrom",
+                    "kms:ReEncryptTo",
+                    "iam:PassRole",
+                    "backup:DescribeBackupJob",
+                    "backup:StartBackupJob",
+                    "backup:StopBackupJob",
+                    "backup:DeleteRecoveryPoint",
+                    "backup:ListRecoveryPointsByBackupVault",
+                    "backup:ListRecoveryPointsByResource",
+                    "kms:CreateGrant",
+                    "kms:RetireGrant",
+                    "backup:CreateBackupVault",
+                    "backup:DescribeBackupVault",
+                    "backup:DeleteBackupVault",
+                    "backup-storage:MountCapsule",
+                    "tag:GetResources",
+                    "tag:TagResources",
+                    "tag:UntagResources",
+                    "tag:GetTagKeys",
+                    "tag:GetTagValues",
+                    "rds:AddTagsToResource",
+                    "rds:RemoveTagsFromResource",
+                    "rds:ListTagsForResource",
+                    "rds:DescribeDBParameterGroups",
+                    "rds:DescribeDBSubnetGroups",
+                    "rds:DescribeOptionGroups",
+                    "rds:DescribeOrderableDBInstanceOptions",
+                    "rds:DescribeDBInstanceAutomatedBackups",
+                    "rds:RestoreDBInstanceFromDBSnapshot",
+                    "rds:RestoreDBInstanceToPointInTime",
+                    "rds:CreateDBSubnetGroup",
+                    "rds:DeleteDBSubnetGroup",
+                    "rds:CopyDBSnapshot",
+                    "rds:DeleteDBInstance",
+                    "rds:DescribeDBEngineVersions"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "RdsProtectionSid"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-rds-protection-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "cloudformation:DetectStackDrift",
+                    "cloudformation:DescribeStackDriftDetectionStatus",
+                    "cloudformation:UpdateTerminationProtection"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "cloudSetupPermissions"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-cloud-accounts-policy"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cloudAccountCustomResource": {
+      "Properties": {
+        "AccountId": {
+          "Ref": "AWS::AccountId"
+        },
+        "MetaData": "{\"CustomerAccountName\":\"rubrik-se-beta\",\"SecurityToken\":\"00000000-0000-0000-0000-000000000000\",\"ExternalId\":\"000000000000\",\"featureMap\":{\"CLOUDACCOUNTS\":1,\"RDS_PROTECTION\":1008},\"seamless_upgrade_enabled\":false,\"ResourceVersionMap\":{},\"salt\":\"9f7e9b6f-5abe-4660-b6ab-d37a77d3573b\"}",
+        "MetaDataVersion": "1",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "CrossAccountRole",
+            "Arn"
+          ]
+        },
+        "ServiceToken": {
+          "Fn::FindInMap": [
+            "regionTopicMap",
+            {
+              "Ref": "AWS::Region"
+            },
+            "TopicArn"
+          ]
+        }
+      },
+      "Type": "Custom::cloudAccountCustomResource",
+      "Version": "2012-10-17"
+    }
+  }
+}

@@ -1,0 +1,398 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This template creates/updates a cross account role.",
+  "Mappings": {
+    "regionTopicMap": {
+      "ap-northeast-1": {
+        "TopicArn": "arn:aws:sns:ap-northeast-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-northeast-2": {
+        "TopicArn": "arn:aws:sns:ap-northeast-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-south-1": {
+        "TopicArn": "arn:aws:sns:ap-south-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-southeast-1": {
+        "TopicArn": "arn:aws:sns:ap-southeast-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-southeast-2": {
+        "TopicArn": "arn:aws:sns:ap-southeast-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ca-central-1": {
+        "TopicArn": "arn:aws:sns:ca-central-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-central-1": {
+        "TopicArn": "arn:aws:sns:eu-central-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-north-1": {
+        "TopicArn": "arn:aws:sns:eu-north-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-1": {
+        "TopicArn": "arn:aws:sns:eu-west-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-2": {
+        "TopicArn": "arn:aws:sns:eu-west-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-3": {
+        "TopicArn": "arn:aws:sns:eu-west-3:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "sa-east-1": {
+        "TopicArn": "arn:aws:sns:sa-east-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-east-1": {
+        "TopicArn": "arn:aws:sns:us-east-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-east-2": {
+        "TopicArn": "arn:aws:sns:us-east-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-west-1": {
+        "TopicArn": "arn:aws:sns:us-west-1:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-west-2": {
+        "TopicArn": "arn:aws:sns:us-west-2:000000000000:spark-cloud-accounts-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  "Outputs": {
+    "RoleARN": {
+      "Description": "Cross account role ARN used by Rubrik to access feature specific resources.",
+      "Value": {
+        "Fn::GetAtt": [
+          "CrossAccountRole",
+          "Arn"
+        ]
+      }
+    },
+    "StackARN": {
+      "Description": "The ARN of the stack created as a result of this cloud formation script",
+      "Value": {
+        "Ref": "AWS::StackId"
+      }
+    }
+  },
+  "Resources": {
+    "CrossAccountRole": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "00000000-0000-0000-0000-000000000000"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::000000000000:user/rubrik-galactus-b30e0"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "autoscaling:CreateAutoScalingGroup",
+                    "autoscaling:CreateLaunchConfiguration",
+                    "autoscaling:DeleteAutoScalingGroup",
+                    "autoscaling:DeleteLaunchConfiguration",
+                    "autoscaling:DescribeAutoScalingGroups",
+                    "autoscaling:DescribeLaunchConfigurations",
+                    "eks:CreateCluster",
+                    "eks:DeleteCluster",
+                    "eks:DescribeCluster",
+                    "iam:PassRole",
+                    "ec2:CreateSecurityGroup",
+                    "ec2:CreateTags",
+                    "ec2:DescribeSecurityGroups",
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeTags",
+                    "ec2:DescribeVpcs",
+                    "iam:CreateServiceLinkedRole"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "ExocomputeSid"
+                },
+                {
+                  "Action": [
+                    "ec2:AuthorizeSecurityGroupEgress",
+                    "ec2:AuthorizeSecurityGroupIngress"
+                  ],
+                  "Condition": {
+                    "StringLike": {
+                      "ec2:ResourceTag/rk_managed": "*"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "ExocomputeSecurityGroupSid"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-exocompute-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "cloudformation:DetectStackDrift",
+                    "cloudformation:DescribeStackDriftDetectionStatus",
+                    "cloudformation:UpdateTerminationProtection"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "cloudSetupPermissions"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-cloud-accounts-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ec2:AttachVolume",
+                    "ec2:CopyImage",
+                    "ec2:CopySnapshot",
+                    "ec2:CreateImage",
+                    "ec2:CreateSnapshot",
+                    "ec2:CreateSnapshots",
+                    "ec2:CreateTags",
+                    "ec2:DescribeTags",
+                    "ec2:CreateVolume",
+                    "ec2:DeleteSnapshot",
+                    "ec2:DeleteVolume",
+                    "ec2:DeleteTags",
+                    "ec2:DeregisterImage",
+                    "ec2:DescribeAvailabilityZones",
+                    "ec2:DescribeImages",
+                    "ec2:DescribeImportImageTasks",
+                    "ec2:DescribeInstances",
+                    "ec2:DescribeKeyPairs",
+                    "ec2:DescribeSecurityGroups",
+                    "ec2:DescribeSnapshots",
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeVolumes",
+                    "ec2:DescribeVpcs",
+                    "ec2:DetachVolume",
+                    "ec2:ImportImage",
+                    "ec2:ModifyImageAttribute",
+                    "ec2:ModifyInstanceAttribute",
+                    "ec2:RunInstances",
+                    "ec2:StartInstances",
+                    "ec2:StopInstances",
+                    "ec2:TerminateInstances",
+                    "kms:CreateGrant",
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey",
+                    "kms:GenerateDataKeyWithoutPlaintext",
+                    "kms:ListKeys",
+                    "kms:ListAliases",
+                    "kms:ReEncryptFrom",
+                    "kms:ReEncryptTo",
+                    "ec2:DescribeVolumeAttribute",
+                    "ec2:DescribeSnapshotAttribute",
+                    "s3:HeadBucket",
+                    "s3:ListAllMyBuckets",
+                    "s3:ListBucket",
+                    "s3:AbortMultipartUpload",
+                    "s3:CreateBucket",
+                    "s3:PutObject",
+                    "s3:DeleteBucket",
+                    "s3:DeleteObject",
+                    "s3:DeleteObjectVersion"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "NativeProtectionSid"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-ec2-protection-policy"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "ExocomputeEKSMasterNodeRole": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "eks.amazonaws.com"
+              },
+              "Sid": "ClusterAssumeRolePolicyDocumentSid"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonEKSServicePolicy",
+          "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "kms:CreateGrant",
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey",
+                    "kms:GenerateDataKeyWithoutPlaintext",
+                    "kms:ReEncryptTo",
+                    "kms:ReEncryptFrom"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "ClusterRoleKMSPolicyDocumentSid"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "ClusterRoleKMSPolicy"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "ExocomputeEKSWorkerNodeInstanceProfile": {
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "ExocomputeEKSWorkerNodeRole"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::InstanceProfile"
+    },
+    "ExocomputeEKSWorkerNodeRole": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ec2.amazonaws.com"
+              },
+              "Sid": "WorkerNodeAssumeRolePolicyDocumentSid"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "ManagedPolicyArns": [
+          "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy",
+          "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy",
+          "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+        ],
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "autoscaling:DescribeAutoScalingGroups",
+                    "autoscaling:DescribeAutoScalingInstances",
+                    "autoscaling:DescribeLaunchConfigurations",
+                    "autoscaling:DescribeTags",
+                    "autoscaling:SetDesiredCapacity",
+                    "autoscaling:TerminateInstanceInAutoScalingGroup"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "NodeRoleAutoscalingPolicyDocumentSid"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "NodeRoleAutoscalingPolicy"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cloudAccountCustomResource": {
+      "Properties": {
+        "AccountId": {
+          "Ref": "AWS::AccountId"
+        },
+        "ExocomputeEKSMasterNodeRole": {
+          "Fn::GetAtt": [
+            "ExocomputeEKSMasterNodeRole",
+            "Arn"
+          ]
+        },
+        "ExocomputeEKSWorkerNodeInstanceProfile": {
+          "Fn::GetAtt": [
+            "ExocomputeEKSWorkerNodeInstanceProfile",
+            "Arn"
+          ]
+        },
+        "ExocomputeEKSWorkerNodeRole": {
+          "Fn::GetAtt": [
+            "ExocomputeEKSWorkerNodeRole",
+            "Arn"
+          ]
+        },
+        "MetaData": "{\"CustomerAccountName\":\"rubrik-galactus\",\"SecurityToken\":\"00000000-0000-0000-0000-000000000000\",\"ExternalId\":\"00000000-0000-0000-0000-000000000000\",\"featureMap\":{\"CLOUDACCOUNTS\":1,\"CLOUD_NATIVE_PROTECTION\":1006,\"EXOCOMPUTE\":2},\"seamless_upgrade_enabled\":false,\"ResourceVersionMap\":{\"ExocomputeEKSMasterNodeRole\":\"2\",\"ExocomputeEKSWorkerNodeInstanceProfile\":\"1\",\"ExocomputeEKSWorkerNodeRole\":\"2\"},\"salt\":\"00000000-0000-0000-0000-000000000000\"}",
+        "MetaDataVersion": "1",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "CrossAccountRole",
+            "Arn"
+          ]
+        },
+        "ServiceToken": {
+          "Fn::FindInMap": [
+            "regionTopicMap",
+            {
+              "Ref": "AWS::Region"
+            },
+            "TopicArn"
+          ]
+        }
+      },
+      "Type": "Custom::cloudAccountCustomResource",
+      "Version": "2012-10-17"
+    }
+  }
+}
