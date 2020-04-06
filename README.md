@@ -1,8 +1,8 @@
-# CloudFormation Templates for Amazon Web Services (AWS)
-=======
+# CloudFormation Templates - Cloud-Native Protection for AWS 
+
 # AWS CloudFormation Template: Native Protection
 
-This repository contains CloudFormation Templates designed to help complete the AWS configuration process required for Rubrik Polaris to protect cloud native applications in Amazon Web Services. 
+This repository contains CloudFormation Templates designed to help complete the AWS configuration process required for Rubrik Polaris to protect cloud native applications in Amazon Web Services. These templates are not intended for use outside of Rubrik Polaris.
 
 # :blue_book: Documentation 
 
