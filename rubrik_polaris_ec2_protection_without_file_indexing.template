@@ -1,168 +1,268 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template creates/updates a cross account role.",
-    "Mappings": {
-      "regionTopicMap": {
-        "us-east-1": {
-          "TopicArn": "arn:aws:sns:us-east-1:xxxxxxxxxxxx:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        }
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This template creates/updates a cross account role.",
+  "Mappings": {
+    "regionTopicMap": {
+      "ap-northeast-1": {
+        "TopicArn": "arn:aws:sns:ap-northeast-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-northeast-2": {
+        "TopicArn": "arn:aws:sns:ap-northeast-2:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-south-1": {
+        "TopicArn": "arn:aws:sns:ap-south-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-southeast-1": {
+        "TopicArn": "arn:aws:sns:ap-southeast-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ap-southeast-2": {
+        "TopicArn": "arn:aws:sns:ap-southeast-2:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "ca-central-1": {
+        "TopicArn": "arn:aws:sns:ca-central-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-central-1": {
+        "TopicArn": "arn:aws:sns:eu-central-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-north-1": {
+        "TopicArn": "arn:aws:sns:eu-north-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-1": {
+        "TopicArn": "arn:aws:sns:eu-west-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-2": {
+        "TopicArn": "arn:aws:sns:eu-west-2:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "eu-west-3": {
+        "TopicArn": "arn:aws:sns:eu-west-3:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "sa-east-1": {
+        "TopicArn": "arn:aws:sns:sa-east-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-east-1": {
+        "TopicArn": "arn:aws:sns:us-east-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-east-2": {
+        "TopicArn": "arn:aws:sns:us-east-2:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-west-1": {
+        "TopicArn": "arn:aws:sns:us-west-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      },
+      "us-west-2": {
+        "TopicArn": "arn:aws:sns:us-west-2:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
+      }
+    }
+  },
+  "Outputs": {
+    "RoleARN": {
+      "Description": "Cross account role ARN used by Rubrik to access feature specific resources.",
+      "Value": {
+        "Fn::GetAtt": [
+          "CrossAccountRole",
+          "Arn"
+        ]
       }
     },
-    "Outputs": {
-      "RoleARN": {
-        "Description": "Cross account role ARN used by Rubrik to access feature specific resources.",
-        "Value": {
+    "StackARN": {
+      "Description": "The ARN of the stack created as a result of this cloud formation script",
+      "Value": {
+        "Ref": "AWS::StackId"
+      }
+    }
+  },
+  "Resources": {
+    "CrossAccountRole": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "sts:AssumeRole"
+              ],
+              "Condition": {
+                "StringEquals": {
+                  "sts:ExternalId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "arn:aws:iam::xxxxxxxxxxxx:user/xxxxxxxx-xxxxx"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ec2:DeleteSnapshot",
+                    "ec2:DeleteVolume",
+                    "ec2:TerminateInstances",
+                    "ec2:RevokeSecurityGroupEgress"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:ResourceTag/rk_component": "Cloud Native Protection"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "ebs:ListSnapshotBlocks",
+                    "ebs:ListChangedBlocks"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "aws:ResourceTag/rk_component": "Cloud Native Protection"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:aws:ec2:*::snapshot/*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "ec2:ModifyInstanceAttribute"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:ResourceTag/rk_component": "Cloud Native Protection"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:aws:ec2:*:*:instance*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "ec2:ModifyInstanceAttribute"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:aws:ec2:*:*:security-group*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "ec2:AttachVolume",
+                    "ec2:CopyImage",
+                    "ec2:CopySnapshot",
+                    "ec2:CreateImage",
+                    "ec2:CreateSnapshot",
+                    "ec2:CreateSnapshots",
+                    "ec2:CreateTags",
+                    "ec2:DescribeTags",
+                    "ec2:CreateVolume",
+                    "ec2:DeleteTags",
+                    "ec2:RegisterImage",
+                    "ec2:DeregisterImage",
+                    "ec2:DescribeAvailabilityZones",
+                    "ec2:DescribeImages",
+                    "ec2:DescribeInstances",
+                    "ec2:DescribeKeyPairs",
+                    "ec2:DescribeSecurityGroups",
+                    "ec2:DescribeSnapshots",
+                    "ec2:DescribeSubnets",
+                    "ec2:DescribeVolumes",
+                    "ec2:DescribeVpcs",
+                    "ec2:DetachVolume",
+                    "ec2:ModifyImageAttribute",
+                    "ec2:RunInstances",
+                    "ec2:StartInstances",
+                    "ec2:StopInstances",
+                    "kms:CreateGrant",
+                    "kms:Decrypt",
+                    "kms:DescribeKey",
+                    "kms:Encrypt",
+                    "kms:GenerateDataKey",
+                    "kms:GenerateDataKeyWithoutPlaintext",
+                    "kms:ListKeys",
+                    "kms:ListAliases",
+                    "kms:ReEncryptFrom",
+                    "kms:ReEncryptTo",
+                    "ec2:DescribeVolumeAttribute",
+                    "ec2:DescribeSnapshotAttribute",
+                    "ec2:ModifySnapshotAttribute",
+                    "s3:HeadBucket",
+                    "s3:ListAllMyBuckets",
+                    "s3:ListBucket",
+                    "s3:AbortMultipartUpload",
+                    "s3:CreateBucket",
+                    "s3:PutObject",
+                    "s3:PutObjectTagging",
+                    "s3:PutBucketTagging",
+                    "ec2:GetEbsEncryptionByDefault",
+                    "ec2:CreateSecurityGroup"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ]
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-ec2-protection-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "cloudformation:DetectStackDrift",
+                    "cloudformation:DescribeStackDriftDetectionStatus",
+                    "cloudformation:UpdateTerminationProtection"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "cloudSetupPermissions"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-cloud-accounts-policy"
+          }
+        ]
+      },
+      "Type": "AWS::IAM::Role"
+    },
+    "cloudAccountCustomResource": {
+      "Properties": {
+        "AccountId": {
+          "Ref": "AWS::AccountId"
+        },
+        "MetaData": "{\"CustomerAccountName\":\"xxxxxxxx\",\"SecurityToken\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\"ExternalId\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\"featureMap\":{\"CLOUDACCOUNTS\":1,\"CLOUD_NATIVE_PROTECTION\":1015},\"seamless_upgrade_enabled\":false,\"ResourceVersionMap\":{},\"salt\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx\"}",
+        "MetaDataVersion": "1",
+        "RoleArn": {
           "Fn::GetAtt": [
             "CrossAccountRole",
             "Arn"
           ]
-        }
-      },
-      "StackARN": {
-        "Description": "The ARN of the stack created as a result of this cloud formation script",
-        "Value": {
-          "Ref": "AWS::StackId"
-        }
-      }
-    },
-    "Resources": {
-      "CrossAccountRole": {
-        "Properties": {
-          "AssumeRolePolicyDocument": {
-            "Statement": [
-              {
-                "Action": [
-                  "sts:AssumeRole"
-                ],
-                "Condition": {
-                  "StringEquals": {
-                    "sts:ExternalId": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                  }
-                },
-                "Effect": "Allow",
-                "Principal": {
-                  "AWS": "arn:aws:iam::xxxxxxxxxxxx:user/xxxxxxxx-xxxxx"
-                }
-              }
-            ],
-            "Version": "2012-10-17"
-          },
-          "Path": "/",
-          "Policies": [
+        },
+        "ServiceToken": {
+          "Fn::FindInMap": [
+            "regionTopicMap",
             {
-              "PolicyDocument": {
-                "Statement": [
-                  {
-                    "Action": [
-                      "ec2:AttachVolume",
-                      "ec2:CopyImage",
-                      "ec2:CopySnapshot",
-                      "ec2:CreateImage",
-                      "ec2:CreateSnapshot",
-                      "ec2:CreateSnapshots",
-                      "ec2:CreateTags",
-                      "ec2:DescribeTags",
-                      "ec2:CreateVolume",
-                      "ec2:DeleteSnapshot",
-                      "ec2:DeleteVolume",
-                      "ec2:DeleteTags",
-                      "ec2:DeregisterImage",
-                      "ec2:DescribeAvailabilityZones",
-                      "ec2:DescribeImages",
-                      "ec2:DescribeInstances",
-                      "ec2:DescribeKeyPairs",
-                      "ec2:DescribeSecurityGroups",
-                      "ec2:DescribeSnapshots",
-                      "ec2:DescribeSubnets",
-                      "ec2:DescribeVolumes",
-                      "ec2:DescribeVpcs",
-                      "ec2:DetachVolume",
-                      "ec2:ModifyImageAttribute",
-                      "ec2:RunInstances",
-                      "ec2:StartInstances",
-                      "ec2:StopInstances",
-                      "ec2:TerminateInstances",
-                      "kms:CreateGrant",
-                      "kms:Decrypt",
-                      "kms:DescribeKey",
-                      "kms:Encrypt",
-                      "kms:GenerateDataKey",
-                      "kms:GenerateDataKeyWithoutPlaintext",
-                      "kms:ListKeys",
-                      "kms:ListAliases",
-                      "kms:ReEncryptFrom",
-                      "kms:ReEncryptTo",
-                      "ec2:DescribeVolumeAttribute",
-                      "ec2:DescribeSnapshotAttribute",
-                      "s3:HeadBucket",
-                      "s3:ListAllMyBuckets",
-                      "s3:ListBucket",
-                      "s3:AbortMultipartUpload",
-                      "s3:CreateBucket",
-                      "s3:PutObject",
-                      "s3:PutObjectTagging",
-                      "s3:PutBucketTagging"
-                    ],
-                    "Effect": "Allow",
-                    "Resource": [
-                      "*"
-                    ],
-                    "Sid": "NativeProtectionSid"
-                  }
-                ],
-                "Version": "2012-10-17"
-              },
-              "PolicyName": "rubrik-aws-ec2-protection-policy"
+              "Ref": "AWS::Region"
             },
-            {
-              "PolicyDocument": {
-                "Statement": [
-                  {
-                    "Action": [
-                      "cloudformation:DetectStackDrift",
-                      "cloudformation:DescribeStackDriftDetectionStatus",
-                      "cloudformation:UpdateTerminationProtection"
-                    ],
-                    "Effect": "Allow",
-                    "Resource": [
-                      "*"
-                    ],
-                    "Sid": "cloudSetupPermissions"
-                  }
-                ],
-                "Version": "2012-10-17"
-              },
-              "PolicyName": "rubrik-aws-cloud-accounts-policy"
-            }
+            "TopicArn"
           ]
-        },
-        "Type": "AWS::IAM::Role"
+        }
       },
-      "cloudAccountCustomResource": {
-        "Properties": {
-          "AccountId": {
-            "Ref": "AWS::AccountId"
-          },
-          "MetaData": "{\"CustomerAccountName\":\"xxxxxxxx\",\"SecurityToken\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\"ExternalId\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\"featureMap\":{\"CLOUDACCOUNTS\":1,\"CLOUD_NATIVE_PROTECTION\":1009},\"seamless_upgrade_enabled\":false,\"ResourceVersionMap\":{},\"salt\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx\"}",
-          "MetaDataVersion": "1",
-          "RoleArn": {
-            "Fn::GetAtt": [
-              "CrossAccountRole",
-              "Arn"
-            ]
-          },
-          "ServiceToken": {
-            "Fn::FindInMap": [
-              "regionTopicMap",
-              {
-                "Ref": "AWS::Region"
-              },
-              "TopicArn"
-            ]
-          }
-        },
-        "Type": "Custom::cloudAccountCustomResource",
-        "Version": "2012-10-17"
-      }
+      "Type": "Custom::cloudAccountCustomResource",
+      "Version": "2012-10-17"
     }
   }
+}
