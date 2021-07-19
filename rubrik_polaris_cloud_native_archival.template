@@ -87,15 +87,6 @@
               "Principal": {
                 "AWS": "arn:aws:iam::xxxxxxxxxxxx:user/customer-account-name-12345"
               }
-            },
-            {
-              "Action": [
-                "sts:AssumeRole"
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "backup.amazonaws.com"
-              }
             }
           ],
           "Version": "2012-10-17"
@@ -107,98 +98,50 @@
               "Statement": [
                 {
                   "Action": [
-                    "rds:DeleteDBSnapshot",
-                    "rds:DeleteDBInstance"
+                    "s3:CreateBucket",
+                    "s3:PutObject",
+                    "s3:GetObject",
+                    "s3:ListBucket",
+                    "s3:GetBucketLocation",
+                    "s3:AbortMultipartUpload",
+                    "s3:ListMultipartUploadParts",
+                    "s3:RestoreObject"
                   ],
-                  "Condition": {
-                    "StringEquals": {
-                      "aws:ResourceTag/rk_component": "Cloud Native Protection"
-                    }
-                  },
                   "Effect": "Allow",
                   "Resource": [
                     "*"
-                  ]
+                  ],
+                  "Sid": "archivalStoragePermissions"
                 },
                 {
                   "Action": [
-                    "backup:DeleteBackupVault",
-                    "backup:CreateBackupVault",
-                    "backup:TagResource"
+                    "s3:DeleteObject"
                   ],
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:backup:*:*:backup-vault:rubrik-backup-vault*"
-                  ]
-                },
-                {
-                  "Action": [
-                    "iam:PassRole"
+                    "arn:aws:s3:::rubrik*"
                   ],
-                  "Effect": "Allow",
-                  "Resource": [
-                    "arn:aws:iam::*:role/rubrik-polaris-*"
-                  ]
+                  "Sid": "archivalStorageDeletePermissions"
                 },
                 {
                   "Action": [
-                    "ec2:DescribeSubnets",
-                    "ec2:DescribeVpcs",
-                    "ec2:DescribeSecurityGroups",
-                    "ec2:DescribeAvailabilityZones",
-                    "rds:DescribeDBInstances",
-                    "rds:DescribeDBSnapshots",
-                    "rds:CreateDBSnapshot",
-                    "rds:ModifyDBInstance",
-                    "kms:Decrypt",
-                    "kms:DescribeKey",
                     "kms:Encrypt",
-                    "kms:GenerateDataKey",
+                    "kms:Decrypt",
                     "kms:GenerateDataKeyWithoutPlaintext",
-                    "kms:ListAliases",
-                    "kms:ListKeys",
-                    "kms:ReEncryptFrom",
-                    "kms:ReEncryptTo",
-                    "backup:DescribeBackupJob",
-                    "backup:StartBackupJob",
-                    "backup:StopBackupJob",
-                    "backup:DeleteRecoveryPoint",
-                    "backup:ListRecoveryPointsByBackupVault",
-                    "backup:ListRecoveryPointsByResource",
-                    "kms:CreateGrant",
-                    "kms:RetireGrant",
-                    "backup:DescribeBackupVault",
-                    "backup-storage:MountCapsule",
-                    "tag:GetResources",
-                    "tag:TagResources",
-                    "tag:UntagResources",
-                    "tag:GetTagKeys",
-                    "tag:GetTagValues",
-                    "rds:AddTagsToResource",
-                    "rds:RemoveTagsFromResource",
-                    "rds:ListTagsForResource",
-                    "rds:DescribeDBParameterGroups",
-                    "rds:DescribeDBSubnetGroups",
-                    "rds:DescribeOptionGroups",
-                    "rds:DescribeOrderableDBInstanceOptions",
-                    "rds:DescribeDBInstanceAutomatedBackups",
-                    "rds:RestoreDBInstanceFromDBSnapshot",
-                    "rds:RestoreDBInstanceToPointInTime",
-                    "rds:CreateDBSubnetGroup",
-                    "rds:DeleteDBSubnetGroup",
-                    "rds:CopyDBSnapshot",
-                    "rds:DescribeDBEngineVersions"
+                    "kms:GenerateDataKey",
+                    "kms:DescribeKey",
+                    "kms:ListAliases"
                   ],
                   "Effect": "Allow",
                   "Resource": [
                     "*"
                   ],
-                  "Sid": "RdsProtectionSid"
+                  "Sid": "archivalKmsPermissions"
                 }
               ],
               "Version": "2012-10-17"
             },
-            "PolicyName": "rubrik-aws-rds-protection-policy"
+            "PolicyName": "rubrik-aws-cloud-native-archival-location-policy"
           },
           {
             "PolicyDocument": {
@@ -219,7 +162,7 @@
               "Version": "2012-10-17"
             },
             "PolicyName": "rubrik-aws-cloud-accounts-policy"
-          }
+          },
         ]
       },
       "Type": "AWS::IAM::Role"
@@ -229,7 +172,7 @@
         "AccountId": {
           "Ref": "AWS::AccountId"
         },
-        "MetaData": "{\"CustomerAccountName\":\"customer-account-name\",\"SecurityToken\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\"ExternalId\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\"featureMap\":{\"CLOUDACCOUNTS\":1,\"RDS_PROTECTION\":1011},\"seamless_upgrade_enabled\":false,\"ResourceVersionMap\":{},\"salt\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"}",
+        "MetaData": "{\"CustomerAccountName\":\"customer-account-name\",\"SecurityToken\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\"ExternalId\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\",\"featureMap\":{\"CLOUDACCOUNTS\":1,\"CLOUD_NATIVE_ARCHIVAL\":2},\"seamless_upgrade_enabled\":false,\"ResourceVersionMap\":{},\"salt\":\"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"}",
         "MetaDataVersion": "1",
         "RoleArn": {
           "Fn::GetAtt": [
