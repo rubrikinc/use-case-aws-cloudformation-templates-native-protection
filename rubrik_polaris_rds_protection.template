@@ -135,9 +135,34 @@
                   "Action": [
                     "iam:PassRole"
                   ],
+                  "Condition": {
+                    "StringEquals": {
+                      "iam:PassedToService": "backup.amazonaws.com"
+                    }
+                  },
                   "Effect": "Allow",
                   "Resource": [
                     "arn:aws:iam::*:role/rubrik-polaris-*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:CreateGrant"
+                  ],
+                  "Condition": {
+                    "Bool": {
+                      "kms:GrantIsForAWSResource": true
+                    },
+                    "StringLike": {
+                      "kms:ViaService": [
+                        "backup.*.amazonaws.com",
+                        "rds.*.amazonaws.com"
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
                   ]
                 },
                 {
@@ -165,7 +190,6 @@
                     "backup:DeleteRecoveryPoint",
                     "backup:ListRecoveryPointsByBackupVault",
                     "backup:ListRecoveryPointsByResource",
-                    "kms:CreateGrant",
                     "kms:RetireGrant",
                     "backup:DescribeBackupVault",
                     "backup-storage:MountCapsule",
