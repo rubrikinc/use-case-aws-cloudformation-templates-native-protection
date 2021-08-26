@@ -154,6 +154,25 @@
                 },
                 {
                   "Action": [
+                    "kms:CreateGrant"
+                  ],
+                  "Condition": {
+                    "Bool": {
+                      "kms:GrantIsForAWSResource": true
+                    },
+                    "StringLike": {
+                      "kms:ViaService": [
+                        "ec2.*.amazonaws.com"
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ]
+                },
+                {
+                  "Action": [
                     "ec2:AttachVolume",
                     "ec2:CopyImage",
                     "ec2:CopySnapshot",
@@ -180,7 +199,6 @@
                     "ec2:RunInstances",
                     "ec2:StartInstances",
                     "ec2:StopInstances",
-                    "kms:CreateGrant",
                     "kms:Decrypt",
                     "kms:DescribeKey",
                     "kms:Encrypt",
@@ -193,7 +211,6 @@
                     "ec2:DescribeVolumeAttribute",
                     "ec2:DescribeSnapshotAttribute",
                     "ec2:ModifySnapshotAttribute",
-                    "s3:HeadBucket",
                     "s3:ListAllMyBuckets",
                     "s3:ListBucket",
                     "s3:AbortMultipartUpload",
@@ -229,7 +246,6 @@
                     "eks:DeleteCluster",
                     "eks:DescribeCluster",
                     "eks:TagResource",
-                    "iam:PassRole",
                     "ec2:CreateSecurityGroup",
                     "ec2:CreateTags",
                     "ec2:DescribeSecurityGroups",
@@ -243,6 +259,28 @@
                     "*"
                   ],
                   "Sid": "ExocomputeSid"
+                },
+                {
+                  "Action": "iam:PassRole",
+                  "Condition": {
+                    "StringEquals": {
+                      "iam:PassedToService": "eks.amazonaws.com"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": "arn:aws:iam::*:role/rubrik-polaris-*-ExocomputeEKSMasterNodeRole-*",
+                  "Sid": "ExocomputePassMasterRoleSid"
+                },
+                {
+                  "Action": "iam:PassRole",
+                  "Condition": {
+                    "StringEquals": {
+                      "iam:PassedToService": "ec2.amazonaws.com"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": "arn:aws:iam::*:role/rubrik-polaris-*-ExocomputeEKSWorkerNodeRole-*",
+                  "Sid": "ExocomputePassWorkerRoleSid"
                 },
                 {
                   "Action": [
@@ -307,7 +345,6 @@
           "Version": "2012-10-17"
         },
         "ManagedPolicyArns": [
-          "arn:aws:iam::aws:policy/AmazonEKSServicePolicy",
           "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
         ],
         "Policies": [
@@ -316,7 +353,6 @@
               "Statement": [
                 {
                   "Action": [
-                    "kms:CreateGrant",
                     "kms:Decrypt",
                     "kms:DescribeKey",
                     "kms:Encrypt",
@@ -330,6 +366,24 @@
                     "*"
                   ],
                   "Sid": "ClusterRoleKMSPolicyDocumentSid"
+                },
+                {
+                  "Action": "kms:CreateGrant",
+                  "Condition": {
+                    "Bool": {
+                      "kms:GrantIsForAWSResource": true
+                    },
+                    "StringLike": {
+                      "kms:ViaService": [
+                        "ec2.*.amazonaws.com"
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "ClusterRoleKMSGrantDocumentSid"
                 }
               ],
               "Version": "2012-10-17"
