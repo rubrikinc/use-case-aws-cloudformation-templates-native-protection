@@ -6,6 +6,7 @@
       "ap-northeast-1": {
         "TopicArn": "arn:aws:sns:ap-northeast-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
       },
+      "ap-northeast-2": {
         "TopicArn": "arn:aws:sns:ap-northeast-2:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
       },
       "ap-south-1": {
@@ -98,6 +99,26 @@
               "Statement": [
                 {
                   "Action": [
+                    "cloudformation:DetectStackDrift",
+                    "cloudformation:DescribeStackDriftDetectionStatus",
+                    "cloudformation:UpdateTerminationProtection"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "cloudSetupPermissions"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-cloud-accounts-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
                     "s3:CreateBucket",
                     "s3:PutObject",
                     "s3:GetObject",
@@ -142,27 +163,7 @@
               "Version": "2012-10-17"
             },
             "PolicyName": "rubrik-aws-cloud-native-archival-location-policy"
-          },
-          {
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Action": [
-                    "cloudformation:DetectStackDrift",
-                    "cloudformation:DescribeStackDriftDetectionStatus",
-                    "cloudformation:UpdateTerminationProtection"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": [
-                    "*"
-                  ],
-                  "Sid": "cloudSetupPermissions"
-                }
-              ],
-              "Version": "2012-10-17"
-            },
-            "PolicyName": "rubrik-aws-cloud-accounts-policy"
-          },
+          }
         ]
       },
       "Type": "AWS::IAM::Role"

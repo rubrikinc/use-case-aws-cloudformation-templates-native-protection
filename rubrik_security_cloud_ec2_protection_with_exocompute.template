@@ -99,6 +99,21 @@
               "Statement": [
                 {
                   "Action": [
+                    "ec2:ModifyInstanceAttribute",
+                    "ec2:TerminateInstances"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:ResourceTag/rk_component": "Cloud Cluster"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:*:ec2:*:*:instance/*"
+                  ]
+                },
+                {
+                  "Action": [
                     "ec2:DeleteSnapshot",
                     "ec2:DeleteVolume",
                     "ec2:TerminateInstances",
@@ -126,7 +141,7 @@
                   },
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:ec2:*::snapshot/*"
+                    "arn:*:ec2:*::snapshot/*"
                   ]
                 },
                 {
@@ -140,7 +155,7 @@
                   },
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:ec2:*:*:instance*"
+                    "arn:*:ec2:*:*:instance/*"
                   ]
                 },
                 {
@@ -149,7 +164,7 @@
                   ],
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:ec2:*:*:security-group*"
+                    "arn:*:ec2:*:*:security-group/*"
                   ]
                 },
                 {
@@ -164,6 +179,34 @@
                       "kms:ViaService": [
                         "ec2.*.amazonaws.com"
                       ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "iam:PassRole"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "iam:PassedToService": "ec2.amazonaws.com"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:*:iam::*:role/rubrik-cces-*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "iam:PassRole"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "iam:PassedToService": "ec2.amazonaws.com"
                     }
                   },
                   "Effect": "Allow",
@@ -219,7 +262,10 @@
                     "s3:PutObjectTagging",
                     "s3:PutBucketTagging",
                     "ec2:GetEbsEncryptionByDefault",
-                    "ec2:CreateSecurityGroup"
+                    "ec2:CreateSecurityGroup",
+                    "iam:ListInstanceProfiles",
+                    "ec2:AssociateIamInstanceProfile",
+                    "ec2:ReplaceIamInstanceProfileAssociation"
                   ],
                   "Effect": "Allow",
                   "Resource": [
@@ -230,6 +276,26 @@
               "Version": "2012-10-17"
             },
             "PolicyName": "rubrik-aws-ec2-protection-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "cloudformation:DetectStackDrift",
+                    "cloudformation:DescribeStackDriftDetectionStatus",
+                    "cloudformation:UpdateTerminationProtection"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "cloudSetupPermissions"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-cloud-accounts-policy"
           },
           {
             "PolicyDocument": {
@@ -263,24 +329,16 @@
                 {
                   "Action": "iam:PassRole",
                   "Condition": {
-                    "StringEquals": {
-                      "iam:PassedToService": "eks.amazonaws.com"
+                    "StringLike": {
+                      "iam:PassedToService": [
+                        "eks.amazonaws.com",
+                        "ec2.amazonaws.com"
+                      ]
                     }
                   },
                   "Effect": "Allow",
-                  "Resource": "arn:aws:iam::*:role/rubrik-polaris-*-ExocomputeEKSMasterNodeRole-*",
-                  "Sid": "ExocomputePassMasterRoleSid"
-                },
-                {
-                  "Action": "iam:PassRole",
-                  "Condition": {
-                    "StringEquals": {
-                      "iam:PassedToService": "ec2.amazonaws.com"
-                    }
-                  },
-                  "Effect": "Allow",
-                  "Resource": "arn:aws:iam::*:role/rubrik-polaris-*-ExocomputeEKSWorkerNodeRole-*",
-                  "Sid": "ExocomputePassWorkerRoleSid"
+                  "Resource": "arn:aws:iam::*:role/*",
+                  "Sid": "ExocomputePassIamRoleSid"
                 },
                 {
                   "Action": [
@@ -302,26 +360,6 @@
               "Version": "2012-10-17"
             },
             "PolicyName": "rubrik-aws-exocompute-policy"
-          },
-          {
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Action": [
-                    "cloudformation:DetectStackDrift",
-                    "cloudformation:DescribeStackDriftDetectionStatus",
-                    "cloudformation:UpdateTerminationProtection"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": [
-                    "*"
-                  ],
-                  "Sid": "cloudSetupPermissions"
-                }
-              ],
-              "Version": "2012-10-17"
-            },
-            "PolicyName": "rubrik-aws-cloud-accounts-policy"
           }
         ]
       },
@@ -460,7 +498,7 @@
       "Properties": {
         "AccountId": {
           "Ref": "AWS::AccountId"
-        },        
+        },
         "ExocomputeEKSMasterNodeRole": {
           "Fn::GetAtt": [
             "ExocomputeEKSMasterNodeRole",

@@ -99,6 +99,21 @@
               "Statement": [
                 {
                   "Action": [
+                    "ec2:ModifyInstanceAttribute",
+                    "ec2:TerminateInstances"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "ec2:ResourceTag/rk_component": "Cloud Cluster"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:*:ec2:*:*:instance/*"
+                  ]
+                },
+                {
+                  "Action": [
                     "ec2:DeleteSnapshot",
                     "ec2:DeleteVolume",
                     "ec2:TerminateInstances",
@@ -126,7 +141,7 @@
                   },
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:ec2:*::snapshot/*"
+                    "arn:*:ec2:*::snapshot/*"
                   ]
                 },
                 {
@@ -140,7 +155,7 @@
                   },
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:ec2:*:*:instance*"
+                    "arn:*:ec2:*:*:instance/*"
                   ]
                 },
                 {
@@ -149,7 +164,54 @@
                   ],
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:ec2:*:*:security-group*"
+                    "arn:*:ec2:*:*:security-group/*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "kms:CreateGrant"
+                  ],
+                  "Condition": {
+                    "Bool": {
+                      "kms:GrantIsForAWSResource": true
+                    },
+                    "StringLike": {
+                      "kms:ViaService": [
+                        "ec2.*.amazonaws.com"
+                      ]
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "iam:PassRole"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "iam:PassedToService": "ec2.amazonaws.com"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "arn:*:iam::*:role/rubrik-cces-*"
+                  ]
+                },
+                {
+                  "Action": [
+                    "iam:PassRole"
+                  ],
+                  "Condition": {
+                    "StringEquals": {
+                      "iam:PassedToService": "ec2.amazonaws.com"
+                    }
+                  },
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
                   ]
                 },
                 {
@@ -180,7 +242,6 @@
                     "ec2:RunInstances",
                     "ec2:StartInstances",
                     "ec2:StopInstances",
-                    "kms:CreateGrant",
                     "kms:Decrypt",
                     "kms:DescribeKey",
                     "kms:Encrypt",
@@ -193,7 +254,6 @@
                     "ec2:DescribeVolumeAttribute",
                     "ec2:DescribeSnapshotAttribute",
                     "ec2:ModifySnapshotAttribute",
-                    "s3:HeadBucket",
                     "s3:ListAllMyBuckets",
                     "s3:ListBucket",
                     "s3:AbortMultipartUpload",
@@ -202,7 +262,10 @@
                     "s3:PutObjectTagging",
                     "s3:PutBucketTagging",
                     "ec2:GetEbsEncryptionByDefault",
-                    "ec2:CreateSecurityGroup"
+                    "ec2:CreateSecurityGroup",
+                    "iam:ListInstanceProfiles",
+                    "ec2:AssociateIamInstanceProfile",
+                    "ec2:ReplaceIamInstanceProfileAssociation"
                   ],
                   "Effect": "Allow",
                   "Resource": [
