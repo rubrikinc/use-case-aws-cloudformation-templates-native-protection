@@ -6,6 +6,7 @@
       "ap-northeast-1": {
         "TopicArn": "arn:aws:sns:ap-northeast-1:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
       },
+      "ap-northeast-2": {
         "TopicArn": "arn:aws:sns:ap-northeast-2:xxxxxxxxxxxx:sns-topic-name-xxxx-xxx-00000000-0000-0000-0000-000000000000"
       },
       "ap-south-1": {
@@ -107,6 +108,26 @@
               "Statement": [
                 {
                   "Action": [
+                    "cloudformation:DetectStackDrift",
+                    "cloudformation:DescribeStackDriftDetectionStatus",
+                    "cloudformation:UpdateTerminationProtection"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    "*"
+                  ],
+                  "Sid": "cloudSetupPermissions"
+                }
+              ],
+              "Version": "2012-10-17"
+            },
+            "PolicyName": "rubrik-aws-cloud-accounts-policy"
+          },
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
                     "rds:DeleteDBSnapshot",
                     "rds:DeleteDBInstance"
                   ],
@@ -128,7 +149,7 @@
                   ],
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:backup:*:*:backup-vault:rubrik-backup-vault*"
+                    "arn:*:backup:*:*:backup-vault:rubrik-backup-vault*"
                   ]
                 },
                 {
@@ -142,7 +163,7 @@
                   },
                   "Effect": "Allow",
                   "Resource": [
-                    "arn:aws:iam::*:role/rubrik-polaris-*"
+                    "arn:*:iam::*:role/*"
                   ]
                 },
                 {
@@ -173,6 +194,7 @@
                     "ec2:DescribeAvailabilityZones",
                     "rds:DescribeDBInstances",
                     "rds:DescribeDBSnapshots",
+                    "rds:DescribeAccountAttributes",
                     "rds:CreateDBSnapshot",
                     "rds:ModifyDBInstance",
                     "kms:Decrypt",
@@ -211,7 +233,8 @@
                     "rds:CreateDBSubnetGroup",
                     "rds:DeleteDBSubnetGroup",
                     "rds:CopyDBSnapshot",
-                    "rds:DescribeDBEngineVersions"
+                    "rds:DescribeDBEngineVersions",
+                    "rds:ModifyDBSnapshotAttribute"
                   ],
                   "Effect": "Allow",
                   "Resource": [
@@ -223,26 +246,6 @@
               "Version": "2012-10-17"
             },
             "PolicyName": "rubrik-aws-rds-protection-policy"
-          },
-          {
-            "PolicyDocument": {
-              "Statement": [
-                {
-                  "Action": [
-                    "cloudformation:DetectStackDrift",
-                    "cloudformation:DescribeStackDriftDetectionStatus",
-                    "cloudformation:UpdateTerminationProtection"
-                  ],
-                  "Effect": "Allow",
-                  "Resource": [
-                    "*"
-                  ],
-                  "Sid": "cloudSetupPermissions"
-                }
-              ],
-              "Version": "2012-10-17"
-            },
-            "PolicyName": "rubrik-aws-cloud-accounts-policy"
           }
         ]
       },
