@@ -105,7 +105,14 @@
                     "s3:GetBucketLocation",
                     "s3:AbortMultipartUpload",
                     "s3:ListMultipartUploadParts",
-                    "s3:RestoreObject"
+                    "s3:RestoreObject",
+                    "s3:GetObjectVersion",
+                    "s3:GetObjectRetention",
+                    "s3:GetBucketVersioning",
+                    "s3:GetBucketObjectLockConfiguration",
+                    "s3:PutObjectRetention",
+                    "s3:PutBucketVersioning",
+                    "s3:PutBucketObjectLockConfiguration"
                   ],
                   "Effect": "Allow",
                   "Resource": [
@@ -115,7 +122,8 @@
                 },
                 {
                   "Action": [
-                    "s3:DeleteObject"
+                    "s3:DeleteObject",
+                    "s3:DeleteObjectVersion"
                   ],
                   "Effect": "Allow",
                   "Resource": [
