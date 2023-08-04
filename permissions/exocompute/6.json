@@ -1,0 +1,199 @@
+{
+  "Statement": [
+    {
+      "Sid": "ExocomputeDeleteClusterSid",
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "eks:DeleteCluster",
+          "UseCases": [
+            "Deleting an EKS cluster."
+          ]
+        },
+        {
+          "Permission": "autoscaling:DeleteAutoScalingGroup",
+          "UseCases": [
+            "Deleting an auto-scaling group launched for worker nodes."
+          ]
+        }
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/rk_component": "Cloud Native Protection"
+        }
+      }
+    },
+    {
+      "Sid": "ExocomputeDeleteLaunchConfigSid",
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "autoscaling:DeleteLaunchConfiguration",
+          "UseCases": [
+            "Deleting an auto-scaling group launched for worker nodes."
+          ]
+        }
+      ],
+      "Resource": [
+        "arn:*:autoscaling:*:*:launchConfiguration:*:launchConfigurationName/Rubrik-*"
+      ]
+    },
+    {
+      "Sid": "ExocomputeSid",
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "autoscaling:CreateAutoScalingGroup",
+          "UseCases": [
+            "Creating an auto-scaling group for launching worker nodes."
+          ]
+        },
+        {
+          "Permission": "autoscaling:CreateLaunchConfiguration",
+          "UseCases": [
+            "Creating an auto-scaling group for launching worker nodes."
+          ]
+        },
+        {
+          "Permission": "autoscaling:DescribeAutoScalingGroups",
+          "UseCases": [
+            "Retrieving details of an auto-scaling group launched for worker nodes."
+          ]
+        },
+        {
+          "Permission": "autoscaling:DescribeLaunchConfigurations",
+          "UseCases": [
+            "Retrieving details of an auto-scaling group launched for worker nodes."
+          ]
+        },
+        {
+          "Permission": "eks:CreateCluster",
+          "UseCases": [
+            "Launching an EKS cluster."
+          ]
+        },
+        {
+          "Permission": "eks:DescribeCluster",
+          "UseCases": [
+            "Retrieving details of a launched EKS cluster."
+          ]
+        },
+        {
+          "Permission": "eks:TagResource"
+        },
+        {
+          "Permission": "ec2:CreateSecurityGroup",
+          "UseCases": [
+            "Creating a security group for worker nodes."
+          ]
+        },
+        {
+          "Permission": "ec2:CreateTags",
+          "UseCases": [
+            "Creating tags for the launched EC2 worker nodes."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeSecurityGroups",
+          "UseCases": [
+            "Listing security groups."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeSubnets",
+          "UseCases": [
+            "Listing subnets for an Exocompute configuration."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeTags",
+          "UseCases": [
+            "Listing tags on EC2 instances."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeVpcs",
+          "UseCases": [
+            "Listing the VPCs for an Exocompute configuration."
+          ]
+        },
+        {
+          "Permission": "iam:CreateServiceLinkedRole",
+          "UseCases": [
+            "Allowing an autoscaling group to create the AWSServiceRoleForAutoScaling role."
+          ]
+        }
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Sid": "ExocomputeMasterPassIamRoleSid",
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "iam:PassRole"
+        }
+      ],
+      "Resource": "arn:*:iam::*:role${user-provided-value}*",
+      "Condition": {
+        "StringLike": {
+          "iam:PassedToService": [
+            "eks.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ExocomputeWorkerPassIamRoleSid",
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "iam:PassRole",
+          "UseCases": [
+            "Use to allow the passing of the worker node role to EC2 worker nodes and the master node role to the EKS cluster."
+          ]
+        }
+      ],
+      "Resource": "arn:*:iam::*:role${user-provided-value}*",
+      "Condition": {
+        "StringLike": {
+          "iam:PassedToService": [
+            "ec2.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ExocomputeSecurityGroupSid",
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:AuthorizeSecurityGroupEgress",
+          "UseCases": [
+            "Adding egress rules to RSC managed security-groups."
+          ]
+        },
+        {
+          "Permission": "ec2:AuthorizeSecurityGroupIngress",
+          "UseCases": [
+            "Adding ingress rules to RSC managed security-groups."
+          ]
+        }
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringLike": {
+          "ec2:ResourceTag/rk_managed": "*"
+        }
+      }
+    }
+  ],
+  "Version": "2012-10-17"
+}
