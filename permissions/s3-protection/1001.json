@@ -1,0 +1,108 @@
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "s3:ListAllMyBuckets",
+          "UseCase": [
+            "Retrieving the list of S3 buckets."
+          ]
+        },
+        {
+          "Permission": "s3:ListBucket",
+          "UseCase": [
+            "Listing the objects in S3 buckets."
+          ]
+        },
+        {
+          "Permission": "s3:GetObject",
+          "UseCase": [
+          "Retrieving the object from S3 buckets."
+        ]
+        },
+        {
+          "Permission": "s3:GetBucketTagging",
+          "UseCase": [
+          "Retrieving the tag set associated with S3 bucket."
+        ]
+        },
+        {
+          "Permission": "s3:PutObject",
+          "UseCase": [
+          "Adding an object to S3 bucket."
+        ]
+        },
+        {
+          "Permission": "s3:AbortMultipartUpload",
+          "UseCase": [
+          "Aborting a multipart upload process"
+        ]
+        },
+        {
+          "Permission": "s3:GetBucketLocation",
+          "UseCase": [
+          "Retrieving the bucket region."
+        ]
+        },
+        {
+          "Permission": "s3:CreateBucket",
+          "UseCase": [
+          "Creating S3 bucket."
+        ]
+        },
+        {
+          "Permission": "s3:ListBucketMultipartUploads",
+          "UseCase": [
+          "Listing all the multipart upload processes."
+        ]
+        },
+        {
+          "Permission": "s3:PutBucketTagging",
+          "UseCase": [
+          "Adding a set of tags to S3 bucket."
+        ]
+        },
+        {
+          "Permission": "s3:GetObjectAttributes",
+          "UseCase": [
+          "Retrieving attributes related to an S3 object.."
+        ]
+        },
+        {
+          "Permission": "s3:GetObjectTagging",
+          "UseCase": [
+          "Retrieving tag set of an S3 object."
+        ]
+        },
+        {
+          "Permission": "s3:PutObjectTagging",
+          "UseCase": [
+          "Setting a tag set to an S3 object."
+        ]
+        },
+        {
+          "Permission": "s3:ListMultipartUploadParts",
+          "UseCase": [
+          "Listing all the parts for a multipart upload process."
+        ]
+        },
+        {
+          "Permission": "s3:GetObjectAcl",
+          "UseCase": [
+          "Retrieving access control list of an S3 object."
+        ]
+        },
+        {
+          "Permission": "s3:PutObjectAcl",
+          "UseCase": [
+          "Setting the access control list for an S3 object."
+        ]
+        }
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}
