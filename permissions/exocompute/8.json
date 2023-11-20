@@ -349,6 +349,24 @@
 					"UseCases": [
 						"Required for managing the lifecycle of index objects in an S3 bucket."
 					]
+				},
+				{
+					"Permission": "s3:PutLifecycleConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetLifecycleConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:ListBucket",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
 				}
 			],
 			"Resource": [
