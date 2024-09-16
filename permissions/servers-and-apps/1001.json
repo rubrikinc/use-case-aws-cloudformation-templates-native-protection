@@ -158,12 +158,33 @@
           ]
         },
         {
+          "Permission": "ec2:CreateTags",
+          "UseCases": [
+            "Assigning metadata tags to the created resources such as EBS volumes, EC2 instances, images, and snapshots."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeTags",
+          "UseCases": [
+            "Backing up the tags attached to an EC2 instance during backup.",
+            "Avoiding the tag limit while assigning tags to new resources."
+          ]
+        },
+        {
           "Permission": "ec2:CreateVolume",
           "UseCases": [
             "Exporting EBS volumes.",
             "Restoring EC2 instances.",
             "Exporting crash-consistent snapshot of an EC2 instance.",
             "Creating temporary EBS volume to perform indexing for file search and recovery and storage tiering."
+          ]
+        },
+        {
+          "Permission": "ec2:DeleteTags",
+          "UseCases": [
+            "Overwriting existing tags when restoring tags in the EC2 instance restore job.",
+            "Deleting Rubrik metadata tags when the tag limit is exceeded.",
+            "Deleting Garbage Collection (GC) tags when the GC task is no longer required for the resource."
           ]
         },
         {
