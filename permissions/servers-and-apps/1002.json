@@ -1,0 +1,407 @@
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:ModifyInstanceAttribute",
+          "UseCases": [
+            "Changing security groups of an EC2 instance from the no connectivity security group to a user-specified security group for export EC2 instance in a powered off state."
+          ]
+        },
+        {
+          "Permission": "ec2:TerminateInstances",
+          "UseCases": [
+            "Terminating EC2 instances created during failed exports."
+          ]
+        }
+      ],
+      "Resource": [
+        "arn:*:ec2:*:*:instance/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "ec2:ResourceTag/rk_component": "Cloud Cluster"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:TerminateInstances",
+          "UseCases": [
+            "Terminating EC2 instances created during failed exports."
+          ]
+        }
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "ec2:ResourceTag/rk_component": "Cloud Native Protection"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:ModifyInstanceAttribute",
+          "UseCases": [
+            "Changing security groups of an EC2 instance from the no connectivity security group to a user-specified security group for export EC2 instance in a powered off state."
+          ]
+        }
+      ],
+      "Resource": [
+        "arn:*:ec2:*:*:instance/*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "ec2:ResourceTag/rk_component": "Cloud Native Protection"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:ModifyInstanceAttribute",
+          "UseCases": [
+            "Changing security groups of an EC2 instance from the no connectivity security group to a user-specified security group for export EC2 instance in a powered off state."
+          ]
+        }
+      ],
+      "Resource": [
+        "arn:*:ec2:*:*:security-group/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "Bool": {
+          "kms:GrantIsForAWSResource": true
+        },
+        "StringLike": {
+          "kms:ViaService": [
+            "ec2.*.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "iam:PassRole",
+          "UseCases": [
+            "Used to pass iam role to ec2 instance for cloud cluster ES."
+          ]
+        }
+      ],
+      "Resource": [
+        "arn:*:iam::*:role/rubrik-cces-*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "ec2.amazonaws.com"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "iam:PassRole",
+          "UseCases": [
+            "Use to allow the passing of the worker node role to EC2 worker nodes and the master node role to the EKS cluster."
+          ]
+        }
+      ],
+      "Resource": [
+        "*"
+      ],
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "ec2.amazonaws.com"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:AttachVolume",
+          "UseCases": [
+            "Restoring EC2 instances and attaching exported EBS volumes.",
+            "Exporting crash-consistent snapshot of an EC2 instance.",
+            "Exporting EBS volume and replacing it wherever attached.",
+            "Attaching the temporary EBS volume to Amazon Elastic Kubernetes Service (EKS) cluster for indexing and storage tiering."
+          ]
+        },
+        {
+          "Permission": "ec2:CopyImage",
+          "UseCases": [
+            "Cross-region export of EC2 instances.",
+            "Cross-region replication of EC2 instance snapshots."
+          ]
+        },
+        {
+          "Permission": "ec2:CreateImage",
+          "UseCases": [
+            "Creating an image of an EC2 instance for backup."
+          ]
+        },
+        {
+          "Permission": "ec2:CreateTags",
+          "UseCases": [
+            "Assigning metadata tags to the created resources such as EBS volumes, EC2 instances, images, and snapshots."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeTags",
+          "UseCases": [
+            "Backing up the tags attached to an EC2 instance during backup.",
+            "Avoiding the tag limit while assigning tags to new resources."
+          ]
+        },
+        {
+          "Permission": "ec2:CreateVolume",
+          "UseCases": [
+            "Exporting EBS volumes.",
+            "Restoring EC2 instances.",
+            "Exporting crash-consistent snapshot of an EC2 instance.",
+            "Creating temporary EBS volume to perform indexing for file search and recovery and storage tiering."
+          ]
+        },
+        {
+          "Permission": "ec2:DeleteTags",
+          "UseCases": [
+            "Overwriting existing tags when restoring tags in the EC2 instance restore job.",
+            "Deleting Rubrik metadata tags when the tag limit is exceeded.",
+            "Deleting Garbage Collection (GC) tags when the GC task is no longer required for the resource."
+          ]
+        },
+        {
+          "Permission": "ec2:RegisterImage"
+        },
+        {
+          "Permission": "ec2:DeregisterImage",
+          "UseCases": [
+            "Deleting the AMI associated with an expired backup.",
+            "Deleting image in undo of the EC2 instance snapshot task.",
+            "Deleting image after copying it to a new region during the cross-region export.",
+            "Deleting AMIs after a snapshot expiry.",
+            "Deleting any temporary AMI created during replication and export."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeAvailabilityZones",
+          "UseCases": [
+            "Retrieving the list of availability zones while exporting EBS volume and EC2 instance snapshots."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeImages",
+          "UseCases": [
+            "Tracking the image creation status in the EC2 backup task.",
+            "Retrieving image details for the recovery tasks.",
+            "Periodically ensuring that the AMI associated with RSC backups is still available and not deleted by an external actor."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeInstances",
+          "UseCases": [
+            "Retrieving the list of EC2 instances during the refresh task.",
+            "Retrieving instance details during snapshot and recovery tasks."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeKeyPairs",
+          "UseCases": [
+            "Retrieving the list of SSH key pairs during the virtual machine recovery.",
+            "Tracking the associated key pairs for EC2 instances when a backup is taken."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeSecurityGroups",
+          "UseCases": [
+            "Retrieving the list of security groups during the account refresh task.",
+            "Retrieving the list of security groups while exporting EC2 instance snapshots."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeSubnets",
+          "UseCases": [
+            "Retrieving the list of subnets during the account refresh task.",
+            "Retrieving the list of subnets while exporting EC2 instance snapshots."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeVolumes",
+          "UseCases": [
+            "Retrieving the list of EBS Volumes during the refresh task.",
+            "Retrieving volume details in various snapshot and recovery tasks."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeVpcs",
+          "UseCases": [
+            "Retrieving the list of all Virtual Private Clouds (VPC) while exporting EC2 instance snapshots.",
+            "Retrieving the list of VPCs during the account refresh task."
+          ]
+        },
+        {
+          "Permission": "ec2:DetachVolume",
+          "UseCases": [
+            "Detaching the existing volumes to replace them with recovered copies during the restore EC2 instance.",
+            "Detaching an existing EBS volume when the Replace where attached option is selected at the time of exporting an EBS volume.",
+            "Detaching the EBS volume from the temporary EKS cluster when the file search is enabled for an EC2 instance or EBS volume."
+          ]
+        },
+        {
+          "Permission": "ec2:ModifyImageAttribute",
+          "UseCases": [
+            "Modifying the description of EC2 instance snapshots created by RSC.",
+            "The image description is used for identifying all GC leaked images."
+          ]
+        },
+        {
+          "Permission": "ec2:RunInstances",
+          "UseCases": [
+            "Launching a virtual machine from a backup."
+          ]
+        },
+        {
+          "Permission": "ec2:StartInstances",
+          "UseCases": [
+            "Starting a virtual machine that was restored with new disks."
+          ]
+        },
+        {
+          "Permission": "ec2:StopInstances",
+          "UseCases": [
+            "Stopping an EC2 instance. When restoring a virtual machine, disks can only be replaced when the EC2 instance is stopped."
+          ]
+        },
+        {
+          "Permission": "ec2:ModifyVolume",
+          "UseCases": [
+            "Modify Volume."
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeVolumes",
+          "UseCases": [
+            "Describe Volume"
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeVolumesModifications",
+          "UseCases": [
+            "Describe Volumnes Modifications"
+          ]
+        },
+        {
+          "Permission": "ec2:DescribeVolumeAttribute",
+          "UseCases": [
+            "Allowing RSC to identify EBS volumes launched from the AWS marketplace. You cannot perform file recovery and storage tiering for marketplace EBS volumes."
+          ]
+        },
+        {
+          "Permission": "s3:ListAllMyBuckets",
+          "UseCases": [
+            "It is used when listing S3 bucket endpoints."
+          ]
+        },
+        {
+          "Permission": "s3:ListBucket",
+          "UseCases": [
+            "Listing bucket objects and checking if the bucket exists. It is used in the download job."
+          ]
+        },
+        {
+          "Permission": "s3:AbortMultipartUpload",
+          "UseCases": [
+            "Performing the multipart upload. It is used in the file recovery job."
+          ]
+        },
+        {
+          "Permission": "s3:CreateBucket",
+          "UseCases": [
+            "Creating a bucket. It is used in the file recovery job."
+          ]
+        },
+        {
+          "Permission": "s3:PutObject",
+          "UseCases": [
+            "Uploading objects. It is used in the file recovery job."
+          ]
+        },
+        {
+          "Permission": "s3:PutObjectTagging",
+          "UseCases": [
+            "Adding tags to s3 objects"
+          ]
+        },
+        {
+          "Permission": "s3:PutBucketTagging",
+          "UseCases": [
+            "Adding tags to S3 buckets. It is used in the file recovery job."
+          ]
+        },
+        {
+          "Permission": "s3:GetBucketVersioning",
+          "UseCases": [
+            "Get bucket versioning. It is used in cc-provision."
+          ]
+        },
+        {
+          "Permission": "s3:GetBucketObjectLockConfiguration",
+          "UseCases": [
+            "Get bucket object lock configuration. It is used in the file recovery job."
+          ]
+        },
+        {
+          "Permission": "ec2:GetEbsEncryptionByDefault",
+          "UseCases": [
+            "Checking if EBS encryption by default is enabled in the AWS customer account and region."
+          ]
+        },
+        {
+          "Permission": "ec2:CreateSecurityGroup",
+          "UseCases": [
+            "Creating a security group, without connectivity, for exporting AWS virtual machines that are powered off."
+          ]
+        },
+        {
+          "Permission": "iam:ListInstanceProfiles",
+          "UseCases": [
+            "Listing the IAM instance profiles for associating them with EC2 instances for s3 bucket access."
+          ]
+        },
+        {
+          "Permission": "ec2:AssociateIamInstanceProfile",
+          "UseCases": [
+            "Associating an IAM instance profile with an EC2 instance during EC2 export."
+          ]
+        },
+        {
+          "Permission": "ec2:ReplaceIamInstanceProfileAssociation",
+          "UseCases": [
+            "Replacing an IAM instance profile for the EC2 instance during EC2 export."
+          ]
+        }
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ],
+  "Version": "2012-10-17"
+}
