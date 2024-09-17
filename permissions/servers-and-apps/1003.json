@@ -41,23 +41,6 @@
     },
     {
       "Effect": "Allow",
-      "Action": [],
-      "Resource": [
-        "*"
-      ],
-      "Condition": {
-        "Bool": {
-          "kms:GrantIsForAWSResource": true
-        },
-        "StringLike": {
-          "kms:ViaService": [
-            "ec2.*.amazonaws.com"
-          ]
-        }
-      }
-    },
-    {
-      "Effect": "Allow",
       "Action": [
         {
           "Permission": "iam:PassRole",
