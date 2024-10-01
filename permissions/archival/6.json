@@ -1,0 +1,188 @@
+{
+	"Statement": [
+		{
+			"Sid": "archivalStoragePermissions",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:CreateBucket",
+					"UseCases": [
+						"To create the archival location."
+					]
+				},
+				{
+					"Permission": "s3:PutObject",
+					"UseCases": [
+						"To upload backup data to the archival location."
+					]
+				},
+				{
+					"Permission": "s3:GetObject",
+					"UseCases": [
+						"To read archived snapshot data from the archival location."
+					]
+				},
+				{
+					"Permission": "s3:ListBucket",
+					"UseCases": [
+						"To list archival locations and verify connectivity to the archival location."
+					]
+				},
+				{
+					"Permission": "s3:GetBucketLocation",
+					"UseCases": [
+						"To read the region in which the S3 bucket resides."
+					]
+				},
+				{
+					"Permission": "s3:AbortMultipartUpload",
+					"UseCases": [
+						"To perform the multipart upload."
+					]
+				},
+				{
+					"Permission": "s3:ListMultipartUploadParts",
+					"UseCases": [
+						"To list the in-progress multipart uploads."
+					]
+				},
+				{
+					"Permission": "s3:RestoreObject",
+					"UseCases": [
+						"To recover data from archived snapshots."
+					]
+				},
+				{
+					"Permission": "s3:GetObjectVersion",
+					"UseCases": [
+						"To read from S3 buckets with versioning and immutability enabled."
+					]
+				},
+				{
+					"Permission": "s3:GetObjectRetention",
+					"UseCases": [
+						"To retrieve the details of an object lock."
+					]
+				},
+				{
+					"Permission": "s3:GetBucketVersioning",
+					"UseCases": [
+						"To retrieve the versioning status of an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetBucketObjectLockConfiguration",
+					"UseCases": [
+						"To retrieve the locking status of objects belonging to an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutObjectRetention",
+					"UseCases": [
+						"To set object locks."
+					]
+				},
+				{
+					"Permission": "s3:PutBucketVersioning",
+					"UseCases": [
+						"To enable versioning on an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutBucketObjectLockConfiguration",
+					"UseCases": [
+						"To enable object locking on an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:ListBucketVersions",
+					"UseCases": [
+						"Used for operations on immutable buckets used in archival"
+					]
+				},
+				{
+					"Permission": "s3:ListObjectVersions",
+					"UseCases": [
+						"Used to list versions of object in a bucket"
+					]
+				},
+				{
+					"Permission": "s3:PutBucketTagging",
+					"UseCases": [
+						"To update tag on an S3 bucket."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "archivalStorageDeletePermissions",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:DeleteObject",
+					"UseCases": [
+						"To delete the patch files of an archived snapshot in Rubrik buckets after the snapshot expires."
+					]
+				},
+				{
+					"Permission": "s3:DeleteObjectVersion",
+					"UseCases": [
+						"To delete the versions of patch files belonging to an archived snapshot in Rubrik buckets after the snapshot expires."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:s3:::rubrik*"
+			]
+		},
+		{
+			"Sid": "archivalKmsPermissions",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:Encrypt",
+					"UseCases": [
+						"To encrypt the archived snapshot while uploading it to an archival location."
+					]
+				},
+				{
+					"Permission": "kms:Decrypt",
+					"UseCases": [
+						"To read the encrypted archived snapshot data."
+					]
+				},
+				{
+					"Permission": "kms:GenerateDataKeyWithoutPlaintext",
+					"UseCases": [
+						"To encrypt the archived snapshot data."
+					]
+				},
+				{
+					"Permission": "kms:GenerateDataKey",
+					"UseCases": [
+						"To encrypt the archived snapshot data."
+					]
+				},
+				{
+					"Permission": "kms:DescribeKey",
+					"UseCases": [
+						"To encrypt the archived snapshot data."
+					]
+				},
+				{
+					"Permission": "kms:ListAliases",
+					"UseCases": [
+						"To encrypt the archived snapshot data."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	],
+	"Version": "2012-10-17"
+}
