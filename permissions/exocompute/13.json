@@ -645,6 +645,13 @@
 					"UseCases": [
 						"Replicate snapshots to other accounts and regions."
 					]
+				},
+				{
+					"Permission": "rds:DescribeOrderableDBInstanceOptions",
+					"UseCases": [
+						"Listing valid instance types for export.",
+						"Validating parameters for export."
+					]
 				}
 			],
 			"Resource": [
