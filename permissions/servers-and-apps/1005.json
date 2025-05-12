@@ -69,7 +69,7 @@
         }
       ],
       "Resource":[
-        "${user-provided-value}"
+        "*"
       ],
       "Condition":{
         "StringEquals":{
