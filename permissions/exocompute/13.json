@@ -205,7 +205,7 @@
 				}
 			],
 			"Resource": [
-				"arn:aws:lambda:*:*:function:Lambda-Rubrik-Exocompute-*"
+				"arn:*:lambda:*:*:function:Lambda-Rubrik-Exocompute-*"
 			]
 		},
 		{
@@ -232,7 +232,7 @@
 				}
 			],
 			"Resource": [
-				"arn:aws:eks:*:*:cluster/Rubrik-Exocompute-*"
+				"arn:*:eks:*:*:cluster/Rubrik-Exocompute-*"
 			]
 		},
 		{
