@@ -1,0 +1,119 @@
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "s3:ListAllMyBuckets",
+          "UseCases": ["Retrieving the list of S3 buckets."]
+        },
+        {
+          "Permission": "s3:ListBucket",
+          "UseCases": ["Listing the objects in S3 buckets."]
+        },
+        {
+          "Permission": "s3:GetObject",
+          "UseCases": ["Retrieving the object from S3 buckets."]
+        },
+        {
+          "Permission": "s3:GetBucketTagging",
+          "UseCases": ["Retrieving the tag set associated with S3 bucket."]
+        },
+        {
+          "Permission": "s3:PutObject",
+          "UseCases": ["Adding an object to S3 bucket."]
+        },
+        {
+          "Permission": "s3:AbortMultipartUpload",
+          "UseCases": ["Aborting a multipart upload process"]
+        },
+        {
+          "Permission": "s3:GetBucketLocation",
+          "UseCases": ["Retrieving the bucket region."]
+        },
+        {
+          "Permission": "s3:CreateBucket",
+          "UseCases": ["Creating S3 bucket."]
+        },
+        {
+          "Permission": "s3:ListBucketMultipartUploads",
+          "UseCases": ["Listing all the multipart upload processes."]
+        },
+        {
+          "Permission": "s3:PutBucketTagging",
+          "UseCases": ["Adding a set of tags to S3 bucket."]
+        },
+        {
+          "Permission": "s3:GetObjectAttributes",
+          "UseCases": ["Retrieving attributes related to an S3 object.."]
+        },
+        {
+          "Permission": "s3:GetObjectTagging",
+          "UseCases": ["Retrieving tag set of an S3 object."]
+        },
+        {
+          "Permission": "s3:PutObjectTagging",
+          "UseCases": ["Setting a tag set to an S3 object."]
+        },
+        {
+          "Permission": "s3:ListMultipartUploadParts",
+          "UseCases": ["Listing all the parts for a multipart upload process."]
+        },
+        {
+          "Permission": "s3:GetObjectAcl",
+          "UseCases": ["Retrieving access control list of an S3 object."]
+        },
+        {
+          "Permission": "s3:PutObjectAcl",
+          "UseCases": ["Setting the access control list for an S3 object."]
+        },
+        {
+          "Permission": "s3:GetBucketOwnershipControls",
+          "UseCases": ["Getting the bucket ownership controls."]
+        },
+        {
+          "Permission": "s3:PutBucketOwnershipControls",
+          "UseCases": ["Setting the bucket ownership controls."]
+        },
+        {
+          "Permission": "s3:PutObjectVersionTagging",
+          "UseCases": ["Setting a tag set to an S3 object version."]
+        },
+        {
+          "Permission": "s3:PutBucketVersioning",
+          "UseCases": ["Setting versioning for a bucket."]
+        },
+        {
+          "Permission": "s3:PutInventoryConfiguration",
+          "UseCases": ["Configuring inventory for a bucket"]
+        },
+        {
+          "Permission": "s3:PutObjectVersionAcl",
+          "UseCases": ["Restore object acl in versioned bucket"]
+        }
+      ],
+      "Resource": ["*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "cloudwatch:GetMetricStatistics",
+          "UseCases": ["Fetching usage metrics."]
+        }
+      ],
+      "Resource": ["*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "kms:Decrypt",
+          "UseCases": ["Fetching KMS encrypted objects during backup."]
+        }
+      ],
+      "Resource": ["*"]
+    }
+  ],
+  "Version": "2012-10-17"
+}
