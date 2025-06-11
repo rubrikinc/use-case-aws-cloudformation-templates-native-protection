@@ -112,12 +112,12 @@
 						"To update tag on an S3 bucket."
 					]
 				},
-                {
-                    "Permission": "s3:PutBucketPolicy",
-                    "UseCases": [
-                        "To update the bucket policy of an S3 bucket."
-                    ]
-                }
+				{
+					"Permission": "s3:PutBucketPolicy",
+					"UseCases": [
+						"To update the bucket policy of an S3 bucket."
+					]
+				}
 			],
 			"Resource": [
 				"*"
