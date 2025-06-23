@@ -111,16 +111,25 @@
 					"UseCases": [
 						"To update tag on an S3 bucket."
 					]
-				},
-				{
-					"Permission": "s3:PutBucketPolicy",
-					"UseCases": [
-						"To update the bucket policy of an S3 bucket."
-					]
 				}
 			],
 			"Resource": [
 				"*"
+			]
+		},
+		{
+			"Sid": "archivalStorageBucketPolicyPermissions",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:PutBucketPolicy",
+					"UseCases": [
+						"To update the bucket policy of an archival S3 bucket."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:s3:::rubrik*"
 			]
 		},
 		{
