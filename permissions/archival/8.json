@@ -118,6 +118,21 @@
 			]
 		},
 		{
+			"Sid": "archivalStorageBucketPolicyPermissions",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:PutBucketPolicy",
+					"UseCases": [
+						"To update the bucket policy of an archival S3 bucket."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:s3:::rubrik*"
+			]
+		},
+		{
 			"Sid": "archivalStorageDeletePermissions",
 			"Effect": "Allow",
 			"Action": [
@@ -131,21 +146,6 @@
 					"Permission": "s3:DeleteObjectVersion",
 					"UseCases": [
 						"To delete the versions of patch files belonging to an archived snapshot in Rubrik buckets after the snapshot expires."
-					]
-				}
-			],
-			"Resource": [
-				"arn:*:s3:::rubrik*"
-			]
-		},
-		{
-			"Sid": "archivalStorageBucketPolicyPermissions",
-			"Effect": "Allow",
-			"Action": [
-				{
-					"Permission": "s3:PutBucketPolicy",
-					"UseCases": [
-						"To update the bucket policy of an archival S3 bucket."
 					]
 				}
 			],
