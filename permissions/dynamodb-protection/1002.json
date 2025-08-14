@@ -1,0 +1,243 @@
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "dynamodb:ListTables",
+          "UseCases": ["Listing all DynamoDB tables."]
+        },
+        {
+          "Permission": "dynamodb:DescribeTable",
+          "UseCases": ["Describing DynamoDB table properties."]
+        },
+        {
+          "Permission": "dynamodb:ListTagsOfResource",
+          "UseCases": ["Listing tags associated with DynamoDB resource."]
+        },
+        {
+          "Permission": "dynamodb:DescribeTimeToLive",
+          "UseCases": ["Describing Time to Live settings of a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:DescribeGlobalTable",
+          "UseCases": ["Describing a DynamoDB global table."]
+        },
+        {
+          "Permission": "dynamodb:DescribeGlobalTableSettings",
+          "UseCases": ["Describing settings of a DynamoDB global table."]
+        },
+        {
+          "Permission": "dynamodb:ExportTableToPointInTime",
+          "UseCases": ["Exporting DynamoDB table to a point in time."]
+        },
+        {
+          "Permission": "dynamodb:DescribeExport",
+          "UseCases": ["Describing a DynamoDB export."]
+        },
+        {
+          "Permission": "dynamodb:DescribeContinuousBackups",
+          "UseCases": ["Describing continuous backup settings of a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:UpdateContinuousBackups",
+          "UseCases": ["Updating continuous backup settings of a DynamoDB table."]
+        },
+        {
+          "Permission": "s3:PutObject",
+          "UseCases": ["Adding an object to an S3 bucket."]
+        },
+        {
+          "Permission": "s3:GetObjectVersion",
+          "UseCases": ["Get version of an S3 object."]
+        },
+        {
+          "Permission": "s3:AbortMultipartUpload",
+          "UseCases": ["Aborting a multipart upload process."]
+        },
+        {
+          "Permission": "s3:PutObjectAcl",
+          "UseCases": ["Setting the access control list for an S3 object."]
+        },
+        {
+          "Permission": "s3:CreateBucket",
+          "UseCases": ["Creating an S3 bucket."]
+        },
+        {
+          "Permission": "s3:PutBucketVersioning",
+          "UseCases": ["Setting versioning configuration on an S3 bucket."]
+        },
+        {
+          "Permission": "s3:PutBucketObjectLockConfiguration",
+          "UseCases": ["Setting object lock configuration on an S3 bucket."]
+        },
+        {
+          "Permission": "s3:PutBucketPolicy",
+          "UseCases": ["Setting the access policy for an S3 bucket."]
+        },
+        {
+          "Permission": "s3:GetBucketPolicy",
+          "UseCases": ["Retrieving the access policy of an S3 bucket."]
+        },
+        {
+          "Permission": "s3:DeleteBucketPolicy",
+          "UseCases": ["Deleting the access policy of an S3 bucket."]
+        },
+        {
+          "Permission": "s3:PutBucketAcl",
+          "UseCases": ["Setting the access control list for an S3 bucket."]
+        },
+        {
+          "Permission": "s3:ListBucketVersions",
+          "UseCases": ["List S3 objects with their versions."]
+        },
+        {
+          "Permission": "s3:DeleteObjectVersion",
+          "UseCases": ["Deleting version of an S3 object."]
+        },
+        {
+          "Permission": "s3:PutBucketTagging",
+          "UseCases": ["Sets tags to an S3 bucket."]
+        },
+        {
+          "Permission": "s3:GetObject",
+          "UseCases": ["Retrieving an object from an S3 bucket."]
+        },
+        {
+          "Permission": "s3:ListBucket",
+          "UseCases": ["Listing objects in an S3 bucket."]
+        },
+        {
+          "Permission": "s3:RestoreObject",
+          "UseCases": ["Recovering an archived object from an S3 bucket."]
+        },
+        {
+          "Permission": "dynamodb:Scan",
+          "UseCases": ["Scanning a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:Query",
+          "UseCases": ["Querying a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:GetItem",
+          "UseCases": ["Getting an item from a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:UpdateTable",
+          "UseCases": ["Updating a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:CreateTable",
+          "UseCases": ["Creating a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:PutItem",
+          "UseCases": ["Adding or replacing an item in a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:BatchWriteItem",
+          "UseCases": ["Writing multiple items in a DynamoDB table batch."]
+        },
+        {
+          "Permission": "dynamodb:UpdateItem",
+          "UseCases": ["Updating an item in a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:DeleteItem",
+          "UseCases": ["Deleting an item from a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:RestoreTableToPointInTime",
+          "UseCases": ["Restoring a DynamoDB table to a specified point in time."]
+        },
+        {
+          "Permission": "dynamodb:ImportTable",
+          "UseCases": ["Importing data to a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:ListImports",
+          "UseCases": ["Listing ongoing and completed import operations in DynamoDB."]
+        },
+        {
+          "Permission": "dynamodb:DescribeImport",
+          "UseCases": ["Describing a DynamoDB import process."]
+        },
+        {
+          "Permission": "dynamodb:TagResource",
+          "UseCases": ["Adding tags to a DynamoDB resource."]
+        },
+        {
+          "Permission": "dynamodb:UpdateTimeToLive",
+          "UseCases": ["Updating Time To Live settings for a DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:CreateGlobalTable",
+          "UseCases": ["Creating a global DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:UpdateGlobalTable",
+          "UseCases": ["Updating a global DynamoDB table."]
+        },
+        {
+          "Permission": "dynamodb:UpdateGlobalTableSettings",
+          "UseCases": ["Updating settings of a DynamoDB global table."]
+        },
+        {
+          "Permission": "dynamodb:CreateTableReplica",
+          "UseCases": ["Create a replica of a DynamoDB table."]
+        },
+        {
+          "Permission": "logs:CreateLogGroup",
+          "UseCases": ["Creating a new log group in CloudWatch Logs."]
+        },
+        {
+          "Permission": "logs:CreateLogStream",
+          "UseCases": ["Creating a new log stream within a log group in CloudWatch Logs."]
+        },
+        {
+          "Permission": "logs:DescribeLogGroups",
+          "UseCases": ["Listing and describing existing log groups in CloudWatch Logs."]
+        },
+        {
+          "Permission": "logs:DescribeLogStreams",
+          "UseCases": ["Listing and describing log streams within a log group in CloudWatch Logs."]
+        },
+        {
+          "Permission": "logs:PutLogEvents",
+          "UseCases": ["Publishing log events to a log stream within CloudWatch Logs."]
+        },
+        {
+          "Permission": "logs:PutRetentionPolicy",
+          "UseCases": ["Setting the retention policy for log data in a log group in CloudWatch Logs."]
+        },
+        {
+          "Permission": "kms:Decrypt",
+          "UseCases": ["Decrypting data with AWS KMS."]
+        },
+        {
+          "Permission": "kms:Encrypt",
+          "UseCases": ["Encrypting data with AWS KMS."]
+        },
+        {
+          "Permission": "kms:GenerateDataKey",
+          "UseCases": ["Generate data keys with AWS KMS."]
+        },
+        {
+          "Permission": "kms:DescribeKey",
+          "UseCases": ["Describe data key with AWS KMS."]
+        },
+        {
+          "Permission": "kms:CreateGrant",
+          "UseCases": ["Gain access to CMK with AWS KMS."]
+        },
+        {
+          "Permission": "kms:ListAliases",
+          "UseCases": ["Return aliases associated with KMS key."]
+        }
+      ],
+      "Resource": ["*"]
+    }
+  ],
+  "Version": "2012-10-17"
+}
