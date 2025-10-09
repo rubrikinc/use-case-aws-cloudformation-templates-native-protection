@@ -17,7 +17,7 @@
         },
         {
           "Permission": "dynamodb:DescribeContinuousBackups",
-          "UseCases": ["Describing continuous backup settings of a DynamoDB table."]
+          "UseCases": ["Describe settings for continuous backup of a DynamoDB table."]
         },
         {
           "Permission": "dynamodb:ExportTableToPointInTime",
@@ -25,11 +25,11 @@
         },
         {
           "Permission": "dynamodb:DescribeExport",
-          "UseCases": ["Describing a DynamoDB export."]
+          "UseCases": ["Describing a DynamoDB Table export."]
         },
         {
           "Permission": "dynamodb:UpdateContinuousBackups",
-          "UseCases": ["Updating continuous backup settings of a DynamoDB table."]
+          "UseCases": ["Updating settings for continuous backup of a DynamoDB table."]
         },
         {
           "Permission": "dynamodb:DescribeTimeToLive",
@@ -113,7 +113,7 @@
         },
         {
           "Permission": "s3:RestoreObject",
-          "UseCases": ["Recovering an archived object from an S3 bucket."]
+          "UseCases": ["Restoring an archived object from an S3 bucket."]
         },
         {
           "Permission": "dynamodb:Scan",
