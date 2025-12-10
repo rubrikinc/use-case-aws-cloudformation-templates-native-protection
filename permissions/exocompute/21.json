@@ -1,0 +1,531 @@
+{
+	"Statement": [
+		{
+			"Sid": "ExocomputeDeleteClusterSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "eks:DeleteCluster",
+					"UseCases": [
+						"Deleting an EKS cluster."
+					]
+				},
+				{
+					"Permission": "autoscaling:DeleteAutoScalingGroup",
+					"UseCases": [
+						"Deleting an auto-scaling group launched for worker nodes."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"aws:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Sid": "ExocomputeDeleteLaunchConfigSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "autoscaling:DeleteLaunchConfiguration",
+					"UseCases": [
+						"Deleting an auto-scaling group launched for worker nodes."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:autoscaling:*:*:launchConfiguration:*:launchConfigurationName/Rubrik-*"
+			]
+		},
+		{
+			"Sid": "ExocomputeDeleteLaunchTemplateSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DeleteLaunchTemplate",
+					"UseCases": [
+						"Deleting a launch template created for worker nodes."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"aws:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Sid": "ExocomputeSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "autoscaling:CreateAutoScalingGroup",
+					"UseCases": [
+						"Creating an auto-scaling group for launching worker nodes."
+					]
+				},
+				{
+					"Permission": "autoscaling:CreateLaunchConfiguration",
+					"UseCases": [
+						"Creating an auto-scaling group for launching worker nodes."
+					]
+				},
+				{
+					"Permission": "ec2:CreateLaunchTemplate",
+					"UseCases": [
+						"Creating an launch template required for creation of auto scaling group."
+					]
+				},
+				{
+					"Permission": "ec2:RunInstances",
+					"UseCases": [
+						"Creating auto scaling group using the launch template."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeLaunchTemplateVersions",
+					"UseCases": [
+						"Retrieving details of launch template."
+					]
+				},
+				{
+					"Permission": "autoscaling:DescribeAutoScalingGroups",
+					"UseCases": [
+						"Retrieving details of an auto-scaling group launched for worker nodes."
+					]
+				},
+				{
+					"Permission": "autoscaling:DescribeLaunchConfigurations",
+					"UseCases": [
+						"Retrieving details of an auto-scaling group launched for worker nodes."
+					]
+				},
+				{
+					"Permission": "eks:CreateCluster",
+					"UseCases": [
+						"Launching an EKS cluster."
+					]
+				},
+				{
+					"Permission": "eks:DescribeCluster",
+					"UseCases": [
+						"Retrieving details of a launched EKS cluster."
+					]
+				},
+				{
+					"Permission": "eks:TagResource"
+				},
+				{
+					"Permission": "ec2:CreateSecurityGroup",
+					"UseCases": [
+						"Creating a security group for worker nodes."
+					]
+				},
+				{
+					"Permission": "ec2:CreateTags",
+					"UseCases": [
+						"Creating tags for the launched EC2 worker nodes."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeSecurityGroups",
+					"UseCases": [
+						"Listing security groups."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeSubnets",
+					"UseCases": [
+						"Listing subnets for an Exocompute configuration."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeTags",
+					"UseCases": [
+						"Listing tags on EC2 instances."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVpcs",
+					"UseCases": [
+						"Listing the VPCs for an Exocompute configuration."
+					]
+				},
+				{
+					"Permission": "iam:CreateServiceLinkedRole",
+					"UseCases": [
+						"Allowing an autoscaling group to create the AWSServiceRoleForAutoScaling role."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeInstanceTypes",
+					"UseCases": [
+						"To fetch details about the used node type."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "ExocomputeMasterPassIamRoleSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:PassRole"
+				}
+			],
+			"Resource": "arn:*:iam::*:role${user-provided-value}*",
+			"Condition": {
+				"StringLike": {
+					"iam:PassedToService": [
+						"eks.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Sid": "ExocomputeWorkerPassIamRoleSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:PassRole",
+					"UseCases": [
+						"Use to allow the passing of the worker node role to EC2 worker nodes and the master node role to the EKS cluster."
+					]
+				}
+			],
+			"Resource": "arn:*:iam::*:role${user-provided-value}*",
+			"Condition": {
+				"StringLike": {
+					"iam:PassedToService": [
+						"ec2.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Sid": "ExocomputeSecurityGroupSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:AuthorizeSecurityGroupEgress",
+					"UseCases": [
+						"Adding egress rules to RSC managed security-groups."
+					]
+				},
+				{
+					"Permission": "ec2:AuthorizeSecurityGroupIngress",
+					"UseCases": [
+						"Adding ingress rules to RSC managed security-groups."
+					]
+				},
+				{
+					"Permission": "ec2:RevokeSecurityGroupEgress",
+					"UseCases": [
+						"Removing egress rules from RSC managed security-groups."
+					]
+				},
+				{
+					"Permission": "ec2:RevokeSecurityGroupIngress",
+					"UseCases": [
+						"Removing ingress rules from RSC managed security-groups."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringLike": {
+					"ec2:ResourceTag/rk_managed": "*"
+				}
+			}
+		},
+		{
+			"Sid": "ExocomputeLoggingToS3Sid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:PutObject",
+					"UseCases": [
+						"Adding log objects to an S3 bucket from an exocompute environment. This permission is used by the fluentd plugin.",
+						"https://github.com/fluent/fluent-plugin-s3/blob/master/docs/howto.md#iam-policy"
+					]
+				},
+				{
+					"Permission": "s3:GetObject",
+					"UseCases": [
+						"Getting log objects from an S3 bucket from an exocompute environment. This permission is used by the fluentd plugin.",
+						"https://github.com/fluent/fluent-plugin-s3/blob/master/docs/howto.md#iam-policy"
+					]
+				},
+				{
+					"Permission": "s3:GetLifecycleConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of log objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutLifecycleConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of log objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:CreateBucket",
+					"UseCases": [
+						"Creating a bucket for storing logs from an exocompute."
+					]
+				},
+				{
+					"Permission": "s3:ListBucket",
+					"UseCases": [
+						"Listing the bucket for storing logs from an exocompute. This permission is used by the fluentd plugin.",
+						"https://github.com/fluent/fluent-plugin-s3/blob/master/docs/howto.md#iam-policy"
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:s3:::do-not-delete-rk-logs*"
+			]
+		},
+		{
+			"Sid": "WorkloadIndexToS3Sid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:PutObject",
+					"UseCases": [
+						"Adding index objects and associated metadata objects to an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetObject",
+					"UseCases": [
+						"Getting index objects and associated metadata objects to an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:CreateBucket",
+					"UseCases": [
+						"Creating a bucket for storing workload index files and associated metadata."
+					]
+				},
+				{
+					"Permission": "s3:DeleteObject",
+					"UseCases": [
+						"Deleting index objects and associated metadata objects for the expired snapshots."
+					]
+				},
+				{
+					"Permission": "s3:GetObjectVersion",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetObjectRetention",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetBucketVersioning",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetBucketObjectLockConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutObjectRetention",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutBucketVersioning",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutBucketObjectLockConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:ListBucketVersions",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutLifecycleConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetLifecycleConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:ListBucket",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:s3:::rk-cnp-idx*"
+			]
+		},
+		{
+			"Sid": "CentralExocomputeKmsCreateGrantSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:CreateGrant",
+					"UseCases": [
+						"Enabling EC2 service to use the Customer Managed Key (CMK) on the behalf of the user.",
+						"Example: If an EBS volume snapshot is used to spin up EBS volume using a CMK, then create grant is required on the CMK."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"Bool": {
+					"kms:GrantIsForAWSResource": true
+				},
+				"StringLike": {
+					"kms:ViaService": [
+						"ec2.*.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Sid": "CentralExocomputeSpinVolumesSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:DescribeKey",
+					"UseCases": [
+						"Required to check if an encrypted EBS volume snapshot shared with this account would be accessible."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeSnapshots",
+					"UseCases": [
+						"Required to list the details of shared EBS snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:CreateVolume",
+					"UseCases": [
+						"Required to create EBS volumes from shared EBS snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVolumes",
+					"UseCases": [
+						"Required to list the details of EBS volumes spun up for use with Exocompute."
+					]
+				},
+				{
+					"Permission": "kms:Decrypt",
+					"UseCases": [
+						"Used to spin up volumes from shared encrypted EBS snapshots."
+					]
+				},
+				{
+					"Permission": "kms:Encrypt",
+					"UseCases": [
+						"Used to spin up volumes from shared encrypted EBS snapshots."
+					]
+				},
+				{
+					"Permission": "kms:GenerateDataKey",
+					"UseCases": [
+						"Used to spin up volumes from shared encrypted EBS snapshots."
+					]
+				},
+				{
+					"Permission": "kms:GenerateDataKeyWithoutPlaintext",
+					"UseCases": [
+						"Used to spin up volumes from shared encrypted EBS snapshots."
+					]
+				},
+				{
+					"Permission": "kms:ReEncryptFrom",
+					"UseCases": [
+						"Used to spin up volumes from shared encrypted EBS snapshots."
+					]
+				},
+				{
+					"Permission": "kms:ReEncryptTo",
+					"UseCases": [
+						"Used to spin up volumes from shared encrypted EBS snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:DetachVolume",
+					"UseCases": [
+						"Detaching EBS volumes from EC2 instances of the EKS cluster."
+					]
+				},
+				{
+					"Permission": "ec2:DeleteTags",
+					"UseCases": [
+						"Overwriting existing tags when restoring tags in the EC2 instance restore job.",
+						"Deleting Rubrik metadata tags when the tag limit is exceeded.",
+						"Deleting Garbage Collection (GC) tags when the GC task is no longer required for the resource."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "CentralExocomputeDeleteVolumeSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DeleteVolume",
+					"UseCases": [
+						"Deleting temporary EBS volume launched for file indexing and storage tiering."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		}
+	],
+	"Version": "2012-10-17"
+}
