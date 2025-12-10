@@ -44,6 +44,18 @@
 					"UseCases": [
 						"Deleting subnet group created during export."
 					]
+				},
+				{
+					"Permission": "rds:DeleteDBParameterGroup",
+					"UseCases": [
+						"Deleting a parameter group created for recovered database instance"
+					]
+				},
+				{
+					"Permission": "rds:ModifyDBParameterGroup",
+					"UseCases": [
+						"Modify parameters of a parameter group for a recovered database instance."
+					]
 				}
 			],
 			"Resource": [
@@ -51,7 +63,8 @@
 				"arn:*:rds:*:*:db:*",
 				"arn:*:rds:*:*:cluster-snapshot:*",
 				"arn:*:rds:*:*:cluster:*",
-				"arn:*:rds:*:*:subgrp:*"
+				"arn:*:rds:*:*:subgrp:*",
+				"arn:*:rds:*:*:pg:*"
 			],
 			"Condition": {
 				"StringEquals": {
@@ -395,6 +408,7 @@
 			],
 			"Resource": [
 				"arn:*:rds:*:*:db:*",
+				"arn:*:rds:*:*:pg:*",
 				"arn:*:rds:*:*:snapshot:rubrik-snapshot-*",
 				"arn:*:rds:*:*:snapshot:awsbackup:job-*",
 				"arn:*:rds:*:*:cluster:*",
@@ -442,6 +456,8 @@
 				"arn:*:rds:*:*:cluster:*",
 				"arn:*:rds:*:*:subgrp:*",
 				"arn:*:rds:*:*:snapshot:*",
+				"arn:*:rds:*:*:pg:*",
+				"arn:*:rds:*:*:cluster-pg:*",
 				"arn:*:rds:*:*:cluster-snapshot:*",
 				"arn:*:rds:*:*:snapshot:awsbackup:job-*",
 				"arn:*:rds:*:*:snapshot:rubrik-snapshot-*",
@@ -493,6 +509,12 @@
 				},
 				{
 					"Permission": "rds:CreateDBSubnetGroup"
+				},
+				{
+					"Permission": "rds:CreateDBParameterGroup",
+					"UseCases": [
+						"Create a parameter group for a recovered database instance. This is created temporarily during the recovery duration, for adjusting parameters for faster recovery"
+					]
 				}
 			],
 			"Resource": [
