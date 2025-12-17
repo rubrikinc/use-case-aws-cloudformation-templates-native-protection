@@ -1,0 +1,561 @@
+{
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "rds:DeleteDBSnapshot",
+					"UseCases": [
+						"Deleting database instance snapshots."
+					]
+				},
+				{
+					"Permission": "rds:DeleteDBInstance",
+					"UseCases": [
+						"Deleting database instances."
+					]
+				},
+				{
+					"Permission": "rds:DeleteDBCluster",
+					"UseCases": [
+						"Deleting database clusters."
+					]
+				},
+				{
+					"Permission": "rds:DeleteDBClusterSnapshot",
+					"UseCases": [
+						"Deleting database cluster snapshots."
+					]
+				},
+				{
+					"Permission": "rds:ModifyDBSnapshotAttribute",
+					"UseCases": [
+						"Replicate snapshots to other accounts and regions."
+					]
+				},
+				{
+					"Permission": "rds:ModifyDBClusterSnapshotAttribute",
+					"UseCases": [
+						"Replicate snapshots of a database cluster to other accounts and regions."
+					]
+				},
+				{
+					"Permission": "rds:DeleteDBSubnetGroup",
+					"UseCases": [
+						"Deleting subnet group created during export."
+					]
+				},
+				{
+					"Permission": "rds:DeleteDBParameterGroup",
+					"UseCases": [
+						"Deleting a parameter group created for recovered database instance"
+					]
+				},
+				{
+					"Permission": "rds:ModifyDBParameterGroup",
+					"UseCases": [
+						"Modify parameters of a parameter group for a recovered database instance."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:rds:*:*:snapshot:*",
+				"arn:*:rds:*:*:db:*",
+				"arn:*:rds:*:*:cluster-snapshot:*",
+				"arn:*:rds:*:*:cluster:*",
+				"arn:*:rds:*:*:subgrp:*",
+				"arn:*:rds:*:*:pg:*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"aws:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "backup:DeleteBackupVault",
+					"UseCases": [
+						"Deleting the backup vault as a container to organize the backups."
+					]
+				},
+				{
+					"Permission": "backup:CreateBackupVault",
+					"UseCases": [
+						"Creating the backup vault as a container to organize the backups."
+					]
+				},
+				{
+					"Permission": "backup:TagResource",
+					"UseCases": [
+						"TagResource is required to apply any customer-specified tags on the backup vault during its creation."
+					]
+				},
+				{
+					"Permission": "backup:StartBackupJob",
+					"UseCases": [
+						"Starting the backup of a resource using the AWS backup service."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:backup:*:*:backup-vault:rubrik-backup-vault*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:PassRole",
+					"UseCases": [
+						"Allowing the backup service to assume any role and perform operations."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:iam::*:role/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"iam:PassedToService": "backup.amazonaws.com"
+				}
+			}
+		},
+        {
+			"Effect": "Allow",
+			"Action": [
+				{
+                    "Permission": "iam:PassRole",
+					"UseCases": [
+                        "Allowing RDS to assume directory service access role for Kerberos authentication."
+                    ]
+                },
+                {
+					"Permission": "iam:GetRole",
+					"UseCases": [
+                        "Retrieving directory service access role information for RDS Kerberos authentication."
+                    ]
+                }
+			],
+			"Resource": [
+				"arn:*:iam::*:role/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"iam:PassedToService": "rds.amazonaws.com"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:CreateGrant",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database and creating the backup vault."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:kms:*:*:key/*"
+			],
+			"Condition": {
+				"Bool": {
+					"kms:GrantIsForAWSResource": true
+				},
+				"StringLike": {
+					"kms:ViaService": [
+						"backup.*.amazonaws.com",
+						"rds.*.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DescribeSubnets"
+				},
+				{
+					"Permission": "ec2:DescribeVpcs"
+				},
+				{
+					"Permission": "ec2:DescribeSecurityGroups"
+				},
+				{
+					"Permission": "ec2:DescribeAvailabilityZones"
+				},
+				{
+					"Permission": "kms:ListAliases",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "kms:ListKeys",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "tag:GetResources",
+					"UseCases": [
+						"Getting all tagged resources associated with the specified tags."
+					]
+				},
+				{
+					"Permission": "tag:GetTagKeys",
+					"UseCases": [
+						"Getting tag keys."
+					]
+				},
+				{
+					"Permission": "tag:GetTagValues",
+					"UseCases": [
+						"Getting tag values."
+					]
+				},
+				{
+					"Permission": "rds:DescribeAccountAttributes",
+					"UseCases": [
+						"Retrieving information for proactive monitoring and notification for snapshot quota breach."
+					]
+				},
+				{
+					"Permission": "rds:DescribeOrderableDBInstanceOptions",
+					"UseCases": [
+						"Listing valid instance types for export.",
+						"Validating parameters for export."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBEngineVersions",
+					"UseCases": [
+						"Retrieving information about DB engine version."
+					]
+				},
+				{
+					"Permission": "rds:ListTagsForResource",
+					"UseCases": [
+						"Listing tags for an RDS resource."
+					]
+				},
+				{
+					"Permission": "backup:DescribeBackupJob",
+					"UseCases": [
+						"Getting backup job status using the AWS backup service."
+					]
+				},
+				{
+					"Permission": "backup:StopBackupJob"
+				},
+				{
+					"Permission": "backup:ListRecoveryPointsByResource"
+				},
+				{
+					"Permission": "cloudwatch:GetMetricStatistics",
+					"UseCases": [
+						"Fetching usage metrics."
+					]
+				},
+				{
+					"Permission": "backup-storage:MountCapsule"
+				},
+				{
+					"Permission": "backup:DeleteRecoveryPoint"
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:DescribeKey",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBInstances",
+					"UseCases": [
+						"Retrieving information about the provisioned database instances."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBSnapshots",
+					"UseCases": [
+						"Retrieving information about the provisioned database instance snapshots."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBClusters",
+					"UseCases": [
+						"Retrieving information about the provisioned database clusters."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBClusterSnapshots",
+					"UseCases": [
+						"Retrieving information about the provisioned database cluster snapshots."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBParameterGroups",
+					"UseCases": [
+						"Listing database instance parameter groups for export."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBClusterParameterGroups",
+					"UseCases": [
+						"Listing database cluster parameter groups for export."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBSubnetGroups",
+					"UseCases": [
+						"Listing DB subnet groups for export."
+					]
+				},
+				{
+					"Permission": "rds:DescribeOptionGroups",
+					"UseCases": [
+						"Listing database instance option groups for export."
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBInstanceAutomatedBackups"
+				},
+				{
+					"Permission": "backup:ListRecoveryPointsByBackupVault"
+				},
+				{
+					"Permission": "backup:DescribeBackupVault"
+				}
+			],
+			"Resource": [
+				"arn:*:kms:*:*:key/*",
+				"arn:*:rds:*:*:db:*",
+				"arn:*:rds:*:*:snapshot:*",
+				"arn:*:rds:*:*:cluster:*",
+				"arn:*:rds:*:*:cluster-snapshot:*",
+				"arn:*:rds:*:*:pg:*",
+				"arn:*:rds:*:*:cluster-pg:*",
+				"arn:*:rds:*:*:subgrp:*",
+				"arn:*:rds:*:*:og:*",
+				"arn:*:rds:*:*:auto-backup:*",
+				"arn:*:backup:*:*:backup-vault:*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:Decrypt",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "kms:Encrypt",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "kms:GenerateDataKey",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "kms:GenerateDataKeyWithoutPlaintext",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "kms:ReEncryptFrom",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "kms:ReEncryptTo",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database."
+					]
+				},
+				{
+					"Permission": "kms:RetireGrant",
+					"UseCases": [
+						"Managing encrypted snapshots for an Amazon RDS database and creating the backup vault."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:kms:*:*:key/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "rds:CreateDBSnapshot",
+					"UseCases": [
+						"Create snapshot of a database instance."
+					]
+				},
+				{
+					"Permission": "rds:ModifyDBInstance",
+					"UseCases": [
+						"Removing objects and modifying parameters."
+					]
+				},
+				{
+					"Permission": "rds:CreateDBClusterSnapshot",
+					"UseCases": [
+						"Create snapshot of a database cluster."
+					]
+				},
+				{
+					"Permission": "rds:ModifyDBCluster",
+					"UseCases": [
+						"Removing objects and modifying parameters."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:rds:*:*:db:*",
+				"arn:*:rds:*:*:pg:*",
+				"arn:*:rds:*:*:snapshot:rubrik-snapshot-*",
+				"arn:*:rds:*:*:snapshot:awsbackup:job-*",
+				"arn:*:rds:*:*:cluster:*",
+				"arn:*:rds:*:*:cluster-snapshot:rubrik-snapshot-*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "rds:CopyDBSnapshot",
+					"UseCases": [
+						"Replicate snapshots to other accounts and regions."
+					]
+				},
+				{
+					"Permission": "rds:CopyDBClusterSnapshot",
+					"UseCases": [
+						"Replicate database cluster snapshots to other accounts and regions."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "rds:AddTagsToResource",
+					"UseCases": [
+						"Assigning tags to an RDS resource."
+					]
+				},
+				{
+					"Permission": "rds:RemoveTagsFromResource",
+					"UseCases": [
+						"Removing tags to an RDS resource."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:rds:*:*:db:*",
+				"arn:*:rds:*:*:cluster:*",
+				"arn:*:rds:*:*:subgrp:*",
+				"arn:*:rds:*:*:snapshot:*",
+				"arn:*:rds:*:*:pg:*",
+				"arn:*:rds:*:*:cluster-pg:*",
+				"arn:*:rds:*:*:cluster-snapshot:*",
+				"arn:*:rds:*:*:snapshot:awsbackup:job-*",
+				"arn:*:rds:*:*:snapshot:rubrik-snapshot-*",
+				"arn:*:rds:*:*:cluster-snapshot:rubrik-snapshot-*",
+				"arn:*:rds:*:*:snapshot:do-not-delete-rubrik-intermediate-snapshot-*",
+				"arn:*:rds:*:*:cluster-snapshot:do-not-delete-rubrik-intermediate-snapshot-*",
+				"arn:*:rds:*:*:snapshot:rk-export-copied-snapshot-*",
+				"arn:*:rds:*:*:cluster-snapshot:rk-export-copied-snapshot-*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "rds:RestoreDBInstanceToPointInTime",
+					"UseCases": [
+						"Used for point-in-time recovery of a database instance."
+					]
+				},
+				{
+					"Permission": "rds:RestoreDBInstanceFromDBSnapshot",
+					"UseCases": [
+						"Exporting database instance snapshots during recovery."
+					]
+				},
+				{
+					"Permission": "rds:RestoreDBClusterToPointInTime",
+					"UseCases": [
+						"Used for point-in-time recovery."
+					]
+				},
+				{
+					"Permission": "rds:RestoreDBClusterFromSnapshot",
+					"UseCases": [
+						"Exporting database cluster snapshots during recovery."
+					]
+				},
+				{
+					"Permission": "rds:CreateDBInstance",
+					"UseCases": [
+						"Create RDS database instance for a recovered database cluster."
+					]
+				},
+				{
+					"Permission": "rds:CreateDBCluster",
+					"UseCases": [
+						"Create RDS database cluster for archived snapshot recovery"
+					]
+				},
+				{
+					"Permission": "rds:CreateDBSubnetGroup"
+				},
+				{
+					"Permission": "rds:CreateDBParameterGroup",
+					"UseCases": [
+						"Create a parameter group for a recovered database instance. This is created temporarily during the recovery duration, for adjusting parameters for faster recovery"
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:rds:*:*:db:*",
+				"arn:*:rds:*:*:cluster:*",
+				"arn:*:rds:*:*:pg:*",
+				"arn:*:rds:*:*:cluster-pg:*",
+				"arn:*:rds:*:*:og:*",
+				"arn:*:rds:*:*:secgrp:*",
+				"arn:*:rds:*:*:subgrp:*",
+				"arn:*:rds:*:*:auto-backup:*",
+				"arn:*:rds:*:*:cluster-auto-backup:*",
+				"arn:*:rds:*:*:snapshot:*",
+				"arn:*:rds:*:*:cluster-snapshot:*"
+			]
+		}
+	],
+	"Version": "2012-10-17"
+}
