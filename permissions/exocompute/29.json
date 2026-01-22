@@ -1,0 +1,516 @@
+{
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "lambda:CreateFunction"
+				},
+				{
+					"Permission": "lambda:TagResource"
+				},
+				{
+					"Permission": "s3:GetLifecycleConfiguration"
+				},
+				{
+					"Permission": "kms:Decrypt"
+				},
+				{
+					"Permission": "kms:GenerateDataKeyWithoutPlaintext"
+				},
+				{
+					"Permission": "s3:CreateBucket"
+				},
+				{
+					"Permission": "s3:ListBucket"
+				},
+				{
+					"Permission": "kms:Encrypt"
+				},
+				{
+					"Permission": "s3:PutLifecycleConfiguration"
+				},
+				{
+					"Permission": "kms:ReEncryptTo"
+				},
+				{
+					"Permission": "kms:DescribeKey"
+				},
+				{
+					"Permission": "lambda:DeleteFunction"
+				},
+				{
+					"Permission": "rds:AddTagsToResource"
+				},
+				{
+					"Permission": "lambda:InvokeFunction"
+				},
+				{
+					"Permission": "lambda:GetFunction"
+				},
+				{
+					"Permission": "ecr:GetDownloadUrlForLayer"
+				},
+				{
+					"Permission": "lambda:UpdateFunctionConfiguration"
+				},
+				{
+					"Permission": "kms:ReEncryptFrom"
+				},
+				{
+					"Permission": "ec2:CreateVolume"
+				},
+				{
+					"Permission": "eks:DeleteCluster"
+				},
+				{
+					"Permission": "s3:PutObject"
+				},
+				{
+					"Permission": "s3:GetObject"
+				},
+				{
+					"Permission": "kms:GenerateDataKey"
+				},
+				{
+					"Permission": "ecr:BatchGetImage"
+				},
+				{
+					"Permission": "eks:CreateAccessEntry"
+				},
+				{
+					"Permission": "eks:DescribeCluster"
+				},
+				{
+					"Permission": "autoscaling:DeleteAutoScalingGroup"
+				},
+				{
+					"Permission": "rds:RemoveTagsFromResource"
+				},
+				{
+					"Permission": "autoscaling:CreateAutoScalingGroup"
+				},
+				{
+					"Permission": "eks:CreateCluster"
+				}
+			],
+			"Resource": [
+				"arn:*:lambda:*:*:function:Lambda-Rubrik-Exocompute-*",
+				"arn:*:s3:::do-not-delete-rk-logs*",
+				"arn:*:rds:*:*:subgrp:rk-archival-*",
+				"arn:*:rds:*:*:db:rk-archive-*",
+				"arn:*:rds:*:*:cluster:rk-archive-*",
+				"arn:*:rds:*:*:cluster-snapshot:rk-export-copied-snapshot-*",
+				"arn:*:rds:*:*:snapshot:rk-export-copied-snapshot-*",
+				"arn:*:kms:*:*:key/*",
+				"arn:*:ec2:*:*:volume/*",
+				"arn:*:ecr:*:*:repository/cloudnative-exo-exocompute-configure",
+				"arn:*:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/Rubrik-*",
+				"arn:*:eks:*:*:cluster/Rubrik-Exocompute-*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ssm:SendCommand"
+				},
+				{
+					"Permission": "autoscaling:CreateLaunchConfiguration"
+				},
+				{
+					"Permission": "autoscaling:DeleteLaunchConfiguration"
+				},
+				{
+					"Permission": "eks:TagResource"
+				},
+				{
+					"Permission": "rds:CreateDBSubnetGroup"
+				}
+			],
+			"Resource": [
+				"arn:*:ssm:*:*:document/AWS-RunShellScript",
+				"arn:*:autoscaling:*:*:launchConfiguration:*:launchConfigurationName/Rubrik-*",
+				"arn:*:rds:*:*:subgrp:rk-archival-*",
+				"arn:*:eks:*:*:cluster/Rubrik-Exocompute-*",
+				"arn:*:eks:*:*:addon/Rubrik-Exocompute-*/*/*",
+				"arn:*:eks:*:*:access-entry/Rubrik-Exocompute-*/*/*/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateTags"
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:launch-template/*",
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*:*:security-group/*",
+				"arn:*:ec2:*:*:volume/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:CreateAction": [
+						"RunInstances",
+						"CreateVolume",
+						"CreateLaunchTemplate",
+						"CreateSecurityGroup"
+					]
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateTags"
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:security-group/*"
+			],
+			"Condition": {
+				"StringLike": {
+					"aws:ResourceTag/Name": [
+						"eks-cluster-sg-Rubrik-Exocompute-*",
+						"Polaris-Exocompute-eks-*"
+					]
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:RevokeSecurityGroupIngress"
+				},
+				{
+					"Permission": "ec2:AuthorizeSecurityGroupEgress"
+				},
+				{
+					"Permission": "ec2:AuthorizeSecurityGroupIngress"
+				},
+				{
+					"Permission": "ec2:RevokeSecurityGroupEgress"
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringLike": {
+					"ec2:ResourceTag/rk_managed": "*"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DeleteLaunchTemplate"
+				},
+				{
+					"Permission": "ec2:CreateTags"
+				},
+				{
+					"Permission": "ec2:DetachVolume"
+				},
+				{
+					"Permission": "ec2:DeleteTags"
+				},
+				{
+					"Permission": "ec2:DeleteVolume"
+				},
+				{
+					"Permission": "ec2:TerminateInstances"
+				},
+				{
+					"Permission": "rds:DeleteDBSnapshot"
+				},
+				{
+					"Permission": "rds:DeleteDBCluster"
+				},
+				{
+					"Permission": "rds:DeleteDBInstance"
+				},
+				{
+					"Permission": "ssm:ListCommandInvocations"
+				},
+				{
+					"Permission": "ssm:GetCommandInvocation"
+				},
+				{
+					"Permission": "ssm:SendCommand"
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"aws:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "eks:DeleteAccessEntry"
+				},
+				{
+					"Permission": "rds:CopyDBSnapshot"
+				},
+				{
+					"Permission": "eks:AssociateAccessPolicy"
+				}
+			],
+			"Resource": [
+				"arn:*:eks:*:*:access-entry/Rubrik-Exocompute-*/*/*/*",
+				"arn:*:rds:*:*:snapshot:rk-export-copied-snapshot-*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:CreateServiceLinkedRole"
+				}
+			],
+			"Resource": [
+				"arn:*:iam::*:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+				"arn:*:iam::*:role/aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS"
+			],
+			"Condition": {
+				"StringEquals": {
+					"iam:AWSServiceName": [
+						"autoscaling.amazonaws.com",
+						"eks.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Sid": "ExocomputeMasterPassIamRoleSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:PassRole"
+				}
+			],
+			"Resource": "arn:*:iam::*:role${user-provided-value}*",
+			"Condition": {
+				"StringLike": {
+					"iam:PassedToService": [
+						"eks.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Sid": "ExocomputeWorkerPassIamRoleSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:PassRole",
+					"UseCases": [
+						"Use to allow the passing of the worker node role to EC2 worker nodes , lambda function for exocompute configure and the master node role to the EKS cluster."
+					]
+				}
+			],
+			"Resource": "arn:*:iam::*:role${user-provided-value}*",
+			"Condition": {
+				"StringLike": {
+					"iam:PassedToService": [
+						"ec2.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Sid": "ExocomputeLambdaPassIamRoleSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:PassRole"
+				}
+			],
+			"Resource": "arn:*:iam::*:role${user-provided-value}*",
+			"Condition": {
+				"StringLike": {
+					"iam:PassedToService": [
+						"lambda.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:CreateGrant"
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"Bool": {
+					"kms:GrantIsForAWSResource": "true"
+				},
+				"StringLike": {
+					"kms:ViaService": [
+						"ec2.*.amazonaws.com",
+						"rds.*.amazonaws.com",
+						"backup.*.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "rds:ModifyDBInstance"
+				},
+				{
+					"Permission": "rds:ModifyDBCluster"
+				}
+			],
+			"Resource": [
+				"arn:*:rds:*:*:db:rk-archive-*",
+				"arn:*:rds:*:*:cluster:rk-archive-*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"aws:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "rds:RestoreDBClusterFromSnapshot"
+				},
+				{
+					"Permission": "rds:RestoreDBInstanceFromDBSnapshot"
+				}
+			],
+			"Resource": [
+				"arn:*:rds:*:*:subgrp:rk-archival-*",
+				"arn:*:rds:*:*:db:rk-archive-*",
+				"arn:*:rds:*:*:cluster:rk-archive-*",
+				"arn:*:rds:*:*:pg:*",
+				"arn:*:rds:*:*:snapshot:*",
+				"arn:*:rds:*:*:cluster-pg:*",
+				"arn:*:rds:*:*:cluster-snapshot:*",
+				"arn:*:rds:*:*:og:*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DescribeInstances"
+				},
+				{
+					"Permission": "rds:DescribeDBSnapshots"
+				},
+				{
+					"Permission": "rds:DescribeDBSubnetGroups"
+				},
+				{
+					"Permission": "ec2:DescribeTags"
+				},
+				{
+					"Permission": "autoscaling:DescribeLaunchConfigurations"
+				},
+				{
+					"Permission": "ec2:DescribeLaunchTemplateVersions"
+				},
+				{
+					"Permission": "ec2:RunInstances"
+				},
+				{
+					"Permission": "ec2:DescribeSnapshots"
+				},
+				{
+					"Permission": "ec2:DescribeSecurityGroups"
+				},
+				{
+					"Permission": "ec2:CreateLaunchTemplate"
+				},
+				{
+					"Permission": "autoscaling:DescribeAutoScalingGroups"
+				},
+				{
+					"Permission": "ec2:DescribeVpcs"
+				},
+				{
+					"Permission": "ec2:CreateSecurityGroup"
+				},
+				{
+					"Permission": "ec2:DescribeVolumes"
+				},
+				{
+					"Permission": "rds:DescribeDBClusterSnapshots"
+				},
+				{
+					"Permission": "ec2:DescribeInstanceTypes"
+				},
+				{
+					"Permission": "rds:DescribeDBInstances"
+				},
+				{
+					"Permission": "rds:DescribeOrderableDBInstanceOptions"
+				},
+				{
+					"Permission": "ec2:DescribeSubnets"
+				},
+				{
+					"Permission": "rds:DescribeDBClusters"
+				},
+				{
+					"Permission": "rds:DescribeOptionGroups"
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "rds:CreateDBInstance"
+				}
+			],
+			"Resource": [
+				"arn:*:rds:*:*:subgrp:rk-archival-*",
+				"arn:*:rds:*:*:db:rk-archive-*",
+				"arn:*:rds:*:*:cluster:rk-archive-*",
+				"arn:*:rds:*:*:pg:*",
+				"arn:*:rds:*:*:secgrp:*",
+				"arn:*:rds:*:*:og:*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ssm:ListCommandInvocations"
+				},
+				{
+					"Permission": "ssm:GetCommandInvocation"
+				}
+			],
+			"Resource": [
+				"arn:*:ssm:*:*:*"
+			]
+		}
+	],
+	"Version": "2012-10-17"
+}
