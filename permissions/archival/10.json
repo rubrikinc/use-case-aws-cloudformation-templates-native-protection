@@ -208,7 +208,16 @@
 					"UseCases": [
 						"To retrieve metadata about the KMS key used for encryption."
 					]
-				},
+				}
+			],
+			"Resource": [
+				"arn:*:kms:*:*:key/*"
+			]
+		},
+		{
+			"Sid": "archivalKmsListAliasesPermissions",
+			"Effect": "Allow",
+			"Action": [
 				{
 					"Permission": "kms:ListAliases",
 					"UseCases": [
@@ -217,7 +226,7 @@
 				}
 			],
 			"Resource": [
-				"arn:*:kms:*:*:key/*"
+				"*"
 			]
 		},
 		{
