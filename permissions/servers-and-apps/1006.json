@@ -62,25 +62,6 @@
       "Effect":"Allow",
       "Action":[
         {
-          "Permission":"iam:PassRole",
-          "UseCases":[
-            "used to allow the passing of the instanceProfile which gives specific permissions to perform ops in the bucket"
-          ]
-        }
-      ],
-      "Resource":[
-        "*"
-      ],
-      "Condition":{
-        "StringEquals":{
-          "iam:PassedToService":"ec2.amazonaws.com"
-        }
-      }
-    },
-    {
-      "Effect":"Allow",
-      "Action":[
-        {
           "Permission":"cloudwatch:GetMetricStatistics",
           "UseCases":[
             "Fetching CloudWatch metrics from CCES nodes for monitoring and analysis."
