@@ -1,0 +1,67 @@
+{
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:ListAllMyBuckets",
+					"UseCases": [
+						"It is used when listing S3 bucket endpoints."
+					]
+				},
+				{
+					"Permission": "s3:ListBucket",
+					"UseCases": [
+						"Listing bucket objects and checking if the bucket exists. It is used in the download job."
+					]
+				},
+				{
+					"Permission": "s3:AbortMultipartUpload",
+					"UseCases": [
+						"Performing the multipart upload. It is used in the file recovery job."
+					]
+				},
+				{
+					"Permission": "s3:CreateBucket",
+					"UseCases": [
+						"Creating a bucket. It is used in the file recovery job."
+					]
+				},
+				{
+					"Permission": "s3:PutObject",
+					"UseCases": [
+						"Uploading objects. It is used in the file recovery job."
+					]
+				},
+				{
+					"Permission": "s3:PutObjectTagging",
+					"UseCases": [
+						"Adding tags to s3 objects"
+					]
+				},
+				{
+					"Permission": "s3:PutBucketTagging",
+					"UseCases": [
+						"Adding tags to S3 buckets. It is used in the file recovery job."
+					]
+				},
+				{
+					"Permission": "s3:GetBucketObjectLockConfiguration",
+					"UseCases": [
+						"Obtaining object lock configuration for bucket. This is needed for cc-provision"
+					]
+				},
+				{
+					"Permission": "s3:GetBucketVersioning",
+					"UseCases": [
+						"Obtaining versioning configuration for bucket. This is needed for cc-provision"
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	],
+	"Version": "2012-10-17"
+}

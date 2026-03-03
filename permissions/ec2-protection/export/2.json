@@ -1,0 +1,216 @@
+{
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DeleteVolume",
+					"UseCases": [
+						"Deleting the EBS volumes launched from the backup if a restore or export EC2 instance task fails in the middle.",
+						"Deleting temporary EBS volume launched for file indexing and storage tiering."
+					]
+				},
+				{
+					"Permission": "ec2:TerminateInstances",
+					"UseCases": [
+						"Terminating EC2 instances created during failed exports."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ebs:StartSnapshot"
+				},
+				{
+					"Permission": "ebs:PutSnapshotBlock"
+				},
+				{
+					"Permission": "ebs:CompleteSnapshot"
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::snapshot/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"aws:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:PassRole",
+					"UseCases": [
+						"Use to allow the passing of the worker node role to EC2 worker nodes and the master node role to the EKS cluster."
+					]
+				}
+			],
+			"Resource": [
+				"${user-provided-value}"
+			],
+			"Condition": {
+				"StringEquals": {
+					"iam:PassedToService": "ec2.amazonaws.com"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateVolume",
+					"UseCases": [
+						"Exporting EBS volumes.",
+						"Restoring EC2 instances.",
+						"Exporting crash-consistent snapshot of an EC2 instance."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::snapshot/*",
+				"arn:*:ec2:*:*:volume/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DetachVolume",
+					"UseCases": [
+						"Detaching the existing volumes to replace them with recovered copies during the restore EC2 instance.",
+						"Detaching an existing EBS volume when the Replace where attached option is selected at the time of exporting an EBS volume."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*:*:volume/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:StartInstances",
+					"UseCases": [
+						"Starting a virtual machine that was restored with new disks."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:license-manager:*:*:license-configuration:*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:StopInstances",
+					"UseCases": [
+						"Stopping an EC2 instance. When restoring a virtual machine, disks can only be replaced when the EC2 instance is stopped."
+					]
+				},
+				{
+					"Permission": "ec2:AssociateIamInstanceProfile",
+					"UseCases": [
+						"Associating an IAM instance profile with an EC2 instance during EC2 export."
+					]
+				},
+				{
+					"Permission": "ec2:ReplaceIamInstanceProfileAssociation",
+					"UseCases": [
+						"Replacing an IAM instance profile for the EC2 instance during EC2 export."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:RunInstances",
+					"UseCases": [
+						"Launching a virtual machine from a backup."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:key-pair/*",
+				"arn:*:ec2:*:*:network-interface/*",
+				"arn:*:ec2:*:*:image/*",
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*:*:security-group/*",
+				"arn:*:ec2:*:*:volume/*",
+				"arn:*:ec2:*::snapshot/*",
+				"arn:*:ec2:*:*:subnet/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:RegisterImage"
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::image/*",
+				"arn:*:ec2:*::snapshot/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:AttachVolume",
+					"UseCases": [
+						"Restoring EC2 instances and attaching exported EBS volumes.",
+						"Exporting crash-consistent snapshot of an EC2 instance.",
+						"Exporting EBS volume and replacing it wherever attached."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*:*:volume/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		}
+	],
+	"Version": "2012-10-17"
+}
