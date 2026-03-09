@@ -4,10 +4,16 @@
 			"Effect": "Allow",
 			"Action": [
 				{
-					"Permission": "ec2:ModifyInstanceAttribute"
+					"Permission": "ec2:ModifyInstanceAttribute",
+					"UseCases": [
+						"Changing security groups of an EC2 instance from the no connectivity security group to a user-specified security group for export EC2 instance in a powered off state."
+					]
 				},
 				{
-					"Permission": "ec2:TerminateInstances"
+					"Permission": "ec2:TerminateInstances",
+					"UseCases": [
+						"Terminating EC2 instances created during failed exports."
+					]
 				}
 			],
 			"Resource": [
@@ -23,16 +29,36 @@
 			"Effect": "Allow",
 			"Action": [
 				{
-					"Permission": "ec2:DeleteSnapshot"
+					"Permission": "ec2:DeleteSnapshot",
+					"UseCases": [
+						"Deleting EBS volume snapshots associated with expired backups.",
+						"Deleting associated snapshots when deleting an Amazon Machine Image (AMI) while reverting the Create EC2 instance snapshot task or exporting the EC2 instance snapshot to a different region.",
+						"Deleting snapshots when reverting the Create EBS volume snapshot task.",
+						"Deleting snapshots when exporting the EBS volume snapshot to a different region.",
+						"Deleting crash-consistent snapshots of excluded EBS volumes.",
+						"Deleting snapshot when deleting an AWS account.",
+						"Deleting snapshots after expiry.",
+						"Deleting temporary snapshots created during replication and export."
+					]
 				},
 				{
-					"Permission": "ec2:DeleteVolume"
+					"Permission": "ec2:DeleteVolume",
+					"UseCases": [
+						"Deleting the EBS volumes launched from the backup if a restore or export EC2 instance task fails in the middle.",
+						"Deleting temporary EBS volume launched for file indexing and storage tiering."
+					]
 				},
 				{
-					"Permission": "ec2:TerminateInstances"
+					"Permission": "ec2:TerminateInstances",
+					"UseCases": [
+						"Terminating EC2 instances created during failed exports."
+					]
 				},
 				{
-					"Permission": "ec2:RevokeSecurityGroupEgress"
+					"Permission": "ec2:RevokeSecurityGroupEgress",
+					"UseCases": [
+						"Removing the default egress rule from no connectivity security group for export EC2 instance in a powered off state."
+					]
 				}
 			],
 			"Resource": [
@@ -48,10 +74,16 @@
 			"Effect": "Allow",
 			"Action": [
 				{
-					"Permission": "ebs:ListSnapshotBlocks"
+					"Permission": "ebs:ListSnapshotBlocks",
+					"UseCases": [
+						"Getting the indices of blocks with data or the changed block indices that are used for optimal archival."
+					]
 				},
 				{
-					"Permission": "ebs:ListChangedBlocks"
+					"Permission": "ebs:ListChangedBlocks",
+					"UseCases": [
+						"Getting the indices of blocks with data or the changed block indices that are used for optimal archival."
+					]
 				},
 				{
 					"Permission": "ebs:GetSnapshotBlock"
@@ -79,7 +111,10 @@
 			"Effect": "Allow",
 			"Action": [
 				{
-					"Permission": "ec2:ModifyInstanceAttribute"
+					"Permission": "ec2:ModifyInstanceAttribute",
+					"UseCases": [
+						"Changing security groups of an EC2 instance from the no connectivity security group to a user-specified security group for export EC2 instance in a powered off state."
+					]
 				}
 			],
 			"Resource": [
@@ -95,7 +130,10 @@
 			"Effect": "Allow",
 			"Action": [
 				{
-					"Permission": "ec2:ModifyInstanceAttribute"
+					"Permission": "ec2:ModifyInstanceAttribute",
+					"UseCases": [
+						"Changing security groups of an EC2 instance from the no connectivity security group to a user-specified security group for export EC2 instance in a powered off state."
+					]
 				}
 			],
 			"Resource": [
@@ -106,7 +144,11 @@
 			"Effect": "Allow",
 			"Action": [
 				{
-					"Permission": "kms:CreateGrant"
+					"Permission": "kms:CreateGrant",
+					"UseCases": [
+						"Enabling EC2 service to use the Customer Managed Key (CMK) on the behalf of the user.",
+						"Example: If an EBS volume snapshot is copied from key K1 to key K2, the EC2 service decrypts the K1 encrypted snapshot so that it can be encrypted to K2. To enable this, the EC2 service must be allowed to create grants for K1 and K2."
+					]
 				}
 			],
 			"Resource": [
@@ -127,7 +169,10 @@
 			"Effect": "Allow",
 			"Action": [
 				{
-					"Permission": "iam:PassRole"
+					"Permission": "iam:PassRole",
+					"UseCases": [
+						"Used to pass iam role to ec2 instance for cloud cluster ES."
+					]
 				}
 			],
 			"Resource": [
@@ -143,7 +188,10 @@
 			"Effect": "Allow",
 			"Action": [
 				{
-					"Permission": "iam:PassRole"
+					"Permission": "iam:PassRole",
+					"UseCases": [
+						"Use to allow the passing of the worker node role to EC2 worker nodes and the master node role to the EKS cluster."
+					]
 				}
 			],
 			"Resource": [

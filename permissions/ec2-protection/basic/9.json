@@ -487,7 +487,6 @@
 			}
 		},
 		{
-			"Sid": "WorkloadIndexToS3",
 			"Effect": "Allow",
 			"Action": [
 				{

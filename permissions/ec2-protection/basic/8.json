@@ -131,7 +131,7 @@
 				{
 					"Permission": "ec2:DescribeLockedSnapshots",
 					"UseCases": [
-						"Querying the lock status of EBS snapshots for compliance and monitoring."
+						"Querying the lock status of EBS snapshots to verify immutability protection."
 					]
 				}
 			],
