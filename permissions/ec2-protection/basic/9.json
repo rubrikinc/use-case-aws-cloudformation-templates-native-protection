@@ -1,0 +1,621 @@
+{
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DescribeTags",
+					"UseCases": [
+						"Backing up the tags attached to an EC2 instance during backup.",
+						"Avoiding the tag limit while assigning tags to new resources."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeAvailabilityZones",
+					"UseCases": [
+						"Retrieving the list of availability zones while exporting EBS volume and EC2 instance snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeImages",
+					"UseCases": [
+						"Tracking the image creation status in the EC2 backup task.",
+						"Retrieving image details for the recovery tasks.",
+						"Periodically ensuring that the AMI associated with RSC backups is still available and not deleted by an external actor."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeInstances",
+					"UseCases": [
+						"Retrieving the list of EC2 instances during the refresh task.",
+						"Retrieving instance details during snapshot and recovery tasks."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeHosts",
+					"UseCases": [
+						"Retrieving the state of dedicated hosts for EC2 instance recovery tasks."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeInstanceTypeOfferings",
+					"UseCases": [
+						"Retrieving the list of EC2 instances types during export flow."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeKeyPairs",
+					"UseCases": [
+						"Retrieving the list of SSH key pairs during the virtual machine recovery.",
+						"Tracking the associated key pairs for EC2 instances when a backup is taken."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeSecurityGroups",
+					"UseCases": [
+						"Retrieving the list of security groups during the account refresh task.",
+						"Retrieving the list of security groups while exporting EC2 instance snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeSnapshots",
+					"UseCases": [
+						"Tracking the snapshot creation status during the EBS volume snapshot task.",
+						"Retrieving snapshot details for the recovery tasks.",
+						"Periodically ensuring that the snapshot associated with RSC backups is still available and not deleted by an external actor, for example, an user-initiated script."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeSubnets",
+					"UseCases": [
+						"Retrieving the list of subnets during the account refresh task.",
+						"Retrieving the list of subnets while exporting EC2 instance snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVolumes",
+					"UseCases": [
+						"Retrieving the list of EBS Volumes during the refresh task.",
+						"Retrieving volume details in various snapshot and recovery tasks."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVpcs",
+					"UseCases": [
+						"Retrieving the list of all Virtual Private Clouds (VPC) while exporting EC2 instance snapshots.",
+						"Retrieving the list of VPCs during the account refresh task."
+					]
+				},
+				{
+					"Permission": "kms:ListKeys",
+					"UseCases": [
+						"Displaying Key Management Service (KMS) keys for the AWS account in a region."
+					]
+				},
+				{
+					"Permission": "kms:ListAliases",
+					"UseCases": [
+						"Displaying KMS aliases for the AWS account in a region."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVolumeAttribute",
+					"UseCases": [
+						"Allowing RSC to identify EBS volumes launched from the AWS marketplace. You cannot perform file recovery and storage tiering for marketplace EBS volumes."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeSnapshotAttribute",
+					"UseCases": [
+						"Performing a check to determine if an EBS volume snapshot is from the AWS marketplace or not."
+					]
+				},
+				{
+					"Permission": "iam:ListInstanceProfiles",
+					"UseCases": [
+						"Listing the IAM instance profiles for associating them with EC2 instances for s3 bucket access."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVolumesModifications",
+					"UseCases": [
+						"Describing the most recent volume modification request for the specified EBS volumes."
+					]
+				},
+				{
+					"Permission": "ec2:GetEbsEncryptionByDefault",
+					"UseCases": [
+						"Checking if EBS encryption by default is enabled in the AWS customer account and region."
+					]
+				},
+				{
+					"Permission": "ec2:DescribeLockedSnapshots",
+					"UseCases": [
+						"Querying the lock status of EBS snapshots to verify immutability protection."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DeleteSnapshot",
+					"UseCases": [
+						"Deleting EBS volume snapshots associated with expired backups.",
+						"Deleting associated snapshots when deleting an Amazon Machine Image (AMI) while reverting the Create EC2 instance snapshot task or exporting the EC2 instance snapshot to a different region.",
+						"Deleting snapshots when reverting the Create EBS volume snapshot task.",
+						"Deleting snapshots when exporting the EBS volume snapshot to a different region.",
+						"Deleting crash-consistent snapshots of excluded EBS volumes.",
+						"Deleting snapshot when deleting an AWS account.",
+						"Deleting snapshots after expiry.",
+						"Deleting temporary snapshots created during replication and export."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ebs:ListSnapshotBlocks",
+					"UseCases": [
+						"Getting the indices of blocks with data or the changed block indices that are used for optimal archival."
+					]
+				},
+				{
+					"Permission": "ebs:ListChangedBlocks",
+					"UseCases": [
+						"Getting the indices of blocks with data or the changed block indices that are used for optimal archival."
+					]
+				},
+				{
+					"Permission": "ebs:GetSnapshotBlock"
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::snapshot/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"aws:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:CreateGrant",
+					"UseCases": [
+						"Enabling EC2 service to use the Customer Managed Key (CMK) on the behalf of the user.",
+						"Example: If an EBS volume snapshot is copied from key K1 to key K2, the EC2 service decrypts the K1 encrypted snapshot so that it can be encrypted to K2. To enable this, the EC2 service must be allowed to create grants for K1 and K2."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"Bool": {
+					"kms:GrantIsForAWSResource": true
+				},
+				"StringLike": {
+					"kms:ViaService": [
+						"ec2.*.amazonaws.com"
+					]
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "iam:PassRole",
+					"UseCases": [
+						"Used to pass iam role to ec2 instance for cloud cluster ES."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:iam::*:role/rubrik-cces-*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"iam:PassedToService": "ec2.amazonaws.com"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "kms:Decrypt",
+					"UseCases": [
+						"Performing the custom CMK flow while exporting EC2 instance or EBS volume."
+					]
+				},
+				{
+					"Permission": "kms:DescribeKey",
+					"UseCases": [
+						"Performing the custom CMK flow while exporting EC2 instance or EBS volume."
+					]
+				},
+				{
+					"Permission": "kms:Encrypt",
+					"UseCases": [
+						"Performing the custom CMK flow while exporting EC2 instance or EBS volume."
+					]
+				},
+				{
+					"Permission": "kms:GenerateDataKey",
+					"UseCases": [
+						"Performing the custom CMK flow while exporting EC2 instance or EBS volume."
+					]
+				},
+				{
+					"Permission": "kms:GenerateDataKeyWithoutPlaintext",
+					"UseCases": [
+						"Performing the custom CMK flow while exporting EC2 instance or EBS volume."
+					]
+				},
+				{
+					"Permission": "kms:ReEncryptFrom",
+					"UseCases": [
+						"Performing the custom CMK flow while exporting EC2 instance or EBS volume."
+					]
+				},
+				{
+					"Permission": "kms:ReEncryptTo",
+					"UseCases": [
+						"Performing the custom CMK flow while exporting EC2 instance or EBS volume."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:kms:*:*:key/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CopyImage",
+					"UseCases": [
+						"Cross-region export of EC2 instances.",
+						"Cross-region replication of EC2 instance snapshots."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:image/*",
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*::snapshot/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CopySnapshot",
+					"UseCases": [
+						"Cross-region export and replication of EBS volumes.",
+						"Cross-region export and replication of crash-consistent snapshots of EC2 instances."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::snapshot/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateImage",
+					"UseCases": [
+						"Creating an image of an EC2 instance for backup."
+					]
+				},
+				{
+					"Permission": "ec2:CreateSnapshot",
+					"UseCases": [
+						"Creating a snapshot of an EBS volume for backup."
+					]
+				},
+				{
+					"Permission": "ec2:CreateSnapshots",
+					"UseCases": [
+						"Creating a crash-consistent snapshots of an EC2 instance."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:image/*",
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*::snapshot/*",
+				"arn:*:ec2:*:*:volume/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DeregisterImage",
+					"UseCases": [
+						"Deleting the AMI associated with an expired backup.",
+						"Deleting image in undo of the EC2 instance snapshot task.",
+						"Deleting image after copying it to a new region during the cross-region export.",
+						"Deleting AMIs after a snapshot expiry.",
+						"Deleting any temporary AMI created during replication and export."
+					]
+				},
+				{
+					"Permission": "ec2:ModifyImageAttribute",
+					"UseCases": [
+						"Modifying the description of EC2 instance snapshots created by RSC.",
+						"The image description is used for identifying all GC leaked images."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::image/*",
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*::snapshot/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:ModifyVolume",
+					"UseCases": [
+						"Checking if parameters of a EBS volume like volume size, volume type etc can be modified."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*:*:volume/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:ModifySnapshotAttribute",
+					"UseCases": [
+						"Sharing EBS snapshots with other AWS accounts for cross-account replication."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::snapshot/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateTags",
+					"UseCases": [
+						"Assigning metadata tags to the created resources such as EBS volumes, EC2 instances, images, and snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:DeleteTags",
+					"UseCases": [
+						"Overwriting existing tags when restoring tags in the EC2 instance restore job.",
+						"Deleting Rubrik metadata tags when the tag limit is exceeded.",
+						"Deleting Garbage Collection (GC) tags when the GC task is no longer required for the resource."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateTags",
+					"UseCases": [
+						"Assigning metadata tags to the created resources such as EBS volumes, EC2 instances, images, and snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:DeleteTags",
+					"UseCases": [
+						"Overwriting existing tags when restoring tags in the EC2 instance restore job.",
+						"Deleting Rubrik metadata tags when the tag limit is exceeded.",
+						"Deleting Garbage Collection (GC) tags when the GC task is no longer required for the resource."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:image/*",
+				"arn:*:ec2:*:*:snapshot/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateTags",
+					"UseCases": [
+						"Assigning metadata tags to the created resources such as EBS volumes, EC2 instances, images, and snapshots."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*:*:volume/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:CreateAction": [
+						"RunInstances",
+						"CreateVolume"
+					]
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:PutObject",
+					"UseCases": [
+						"Adding index objects and associated metadata objects to an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetObject",
+					"UseCases": [
+						"Getting index objects and associated metadata objects to an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:CreateBucket",
+					"UseCases": [
+						"Creating a bucket for storing workload index files and associated metadata."
+					]
+				},
+				{
+					"Permission": "s3:DeleteObject",
+					"UseCases": [
+						"Deleting index objects and associated metadata objects for the expired snapshots."
+					]
+				},
+				{
+					"Permission": "s3:GetObjectVersion",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetObjectRetention",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetBucketVersioning",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetBucketObjectLockConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutObjectRetention",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutBucketVersioning",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutBucketObjectLockConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:ListBucketVersions",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:PutLifecycleConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:GetLifecycleConfiguration",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				},
+				{
+					"Permission": "s3:ListBucket",
+					"UseCases": [
+						"Required for managing the lifecycle of index objects in an S3 bucket."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:s3:::rk-cnp-idx*"
+			]
+		},
+		{
+			"Sid": "LockUnlockEBSSnapshot",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:LockSnapshot",
+					"UseCases": [
+						"Locking EBS snapshots in Governance or Compliance mode for immutability protection."
+					]
+				},
+				{
+					"Permission": "ec2:UnlockSnapshot",
+					"UseCases": [
+						"Unlocking EBS snapshots when deleting expired backups."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::snapshot/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		}
+	],
+	"Version": "2012-10-17"
+}

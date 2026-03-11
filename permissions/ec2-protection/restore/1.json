@@ -1,0 +1,110 @@
+{
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ebs:StartSnapshot"
+				},
+				{
+					"Permission": "ebs:PutSnapshotBlock"
+				},
+				{
+					"Permission": "ebs:CompleteSnapshot"
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::snapshot/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"aws:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateVolume",
+					"UseCases": [
+						"Exporting EBS volumes.",
+						"Restoring EC2 instances.",
+						"Exporting crash-consistent snapshot of an EC2 instance."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*::snapshot/*",
+				"arn:*:ec2:*:*:volume/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DetachVolume",
+					"UseCases": [
+						"Detaching the existing volumes to replace them with recovered copies during the restore EC2 instance.",
+						"Detaching an existing EBS volume when the Replace where attached option is selected at the time of exporting an EBS volume."
+					]
+				},
+				{
+					"Permission": "ec2:AttachVolume",
+					"UseCases": [
+						"Restoring EC2 instances and attaching exported EBS volumes.",
+						"Exporting crash-consistent snapshot of an EC2 instance.",
+						"Exporting EBS volume and replacing it wherever attached."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*:*:volume/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:StartInstances",
+					"UseCases": [
+						"Starting a virtual machine that was restored with new disks."
+					]
+				},
+				{
+					"Permission": "ec2:StopInstances",
+					"UseCases": [
+						"Stopping an EC2 instance. When restoring a virtual machine, disks can only be replaced when the EC2 instance is stopped."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateTags",
+					"UseCases": [
+						"Assigning metadata tags to the created resources such as EBS volumes, EC2 instances, images, and snapshots."
+					]
+				},
+				{
+					"Permission": "ec2:DeleteTags",
+					"UseCases": [
+						"Overwriting existing tags when restoring tags in the EC2 instance restore job.",
+						"Deleting Rubrik metadata tags when the tag limit is exceeded.",
+						"Deleting Garbage Collection (GC) tags when the GC task is no longer required for the resource."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*"
+			]
+		}
+	],
+	"Version": "2012-10-17"
+}

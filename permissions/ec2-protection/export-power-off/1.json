@@ -1,0 +1,85 @@
+{
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:RevokeSecurityGroupEgress",
+					"UseCases": [
+						"Removing the default egress rule from no connectivity security group for export EC2 instance in a powered off state."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:ModifyInstanceAttribute",
+					"UseCases": [
+						"Changing security groups of an EC2 instance from the no connectivity security group to a user-specified security group for export EC2 instance in a powered off state."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:instance/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:ResourceTag/rk_component": "Cloud Native Protection"
+				}
+			}
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:ModifyInstanceAttribute",
+					"UseCases": [
+						"Changing security groups of an EC2 instance from the no connectivity security group to a user-specified security group for export EC2 instance in a powered off state."
+					]
+				},
+				{
+					"Permission": "ec2:CreateSecurityGroup",
+					"UseCases": [
+						"Creating a security group, without connectivity, for exporting AWS virtual machines that are powered off."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:vpc/*",
+				"arn:*:ec2:*:*:security-group/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:CreateTags",
+					"UseCases": [
+						"Assigning metadata tags to the created resources such as EBS volumes, EC2 instances, images, and snapshots."
+					]
+				}
+			],
+			"Resource": [
+				"arn:*:ec2:*:*:security-group/*"
+			],
+			"Condition": {
+				"StringEquals": {
+					"ec2:CreateAction": [
+						"CreateSecurityGroup"
+					]
+				}
+			}
+		}
+	],
+	"Version": "2012-10-17"
+}
