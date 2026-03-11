@@ -127,6 +127,12 @@
 					"UseCases": [
 						"Checking if EBS encryption by default is enabled in the AWS customer account and region."
 					]
+				},
+				{
+					"Permission": "ec2:DescribeLockedSnapshots",
+					"UseCases": [
+						"Querying the lock status of EBS snapshots to verify immutability protection."
+					]
 				}
 			],
 			"Resource": [
