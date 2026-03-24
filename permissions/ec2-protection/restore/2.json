@@ -111,7 +111,8 @@
 				}
 			],
 			"Resource": [
-				"arn:*:ec2:*:*:instance/*"
+				"arn:*:ec2:*:*:instance/*",
+				"arn:*:ec2:*:*:volume/*"
 			]
 		}
 	],
