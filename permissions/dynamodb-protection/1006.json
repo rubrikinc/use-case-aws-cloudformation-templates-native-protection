@@ -42,18 +42,6 @@
 					]
 				},
 				{
-					"Permission": "dynamodb:DescribeGlobalTable",
-					"UseCases": [
-						"Describing a DynamoDB global table."
-					]
-				},
-				{
-					"Permission": "dynamodb:DescribeGlobalTableSettings",
-					"UseCases": [
-						"Describing settings of a DynamoDB global table."
-					]
-				},
-				{
 					"Permission": "dynamodb:ExportTableToPointInTime",
 					"UseCases": [
 						"Exporting DynamoDB table to a point in time."
@@ -79,8 +67,7 @@
 				}
 			],
 			"Resource": [
-				"arn:*:dynamodb:*:*:table/*",
-				"arn:*:dynamodb:*:*:global-table/*"
+				"arn:*:dynamodb:*:*:table/*"
 			]
 		},
 		{
