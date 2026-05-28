@@ -6,14 +6,14 @@
         {
           "Permission": "ssm:SendCommand",
           "UseCases": [
-            "Install Rubrik Backup Agent on customer DB hosts via AWS Systems Manager run-command."
+            "Install Rubrik Backup Agent on customer hosts opted into AWS Database Workload Protection via AWS Systems Manager run-command."
           ]
         }
       ],
       "Resource": ["arn:*:ec2:*:*:instance/*"],
       "Condition": {
         "StringEquals": {
-          "aws:ResourceTag/rubrik:workload": ["MSSQL", "ORACLE"]
+          "aws:ResourceTag/rubrik:backup": "true"
         }
       }
     },
