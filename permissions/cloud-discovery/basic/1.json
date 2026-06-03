@@ -1,0 +1,164 @@
+{
+	"Statement": [
+		{
+			"Sid": "CloudDiscoveryEC2RefreshSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DescribeTags",
+					"UseCases": [
+						"Used to discover EC2 tags"
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVpcs",
+					"UseCases": [
+						"Used to discover VPCs"
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVolumeAttribute",
+					"UseCases": [
+						"Used to discover volume attributes"
+					]
+				},
+				{
+					"Permission": "ec2:DescribeSubnets",
+					"UseCases": [
+						"Used to discover subnets"
+					]
+				},
+				{
+					"Permission": "ec2:DescribeVolumes",
+					"UseCases": [
+						"Used to discover volumes"
+					]
+				},
+				{
+					"Permission": "ec2:DescribeInstances",
+					"UseCases": [
+						"Used to discover EC2 instances"
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "CloudDiscoveryRDSRefreshSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DescribeVpcs",
+					"UseCases": [
+						"Used to discover VPCs for RDS"
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBInstances",
+					"UseCases": [
+						"Used to discover RDS instances"
+					]
+				},
+				{
+					"Permission": "rds:DescribeDBClusters",
+					"UseCases": [
+						"Used to discover RDS clusters"
+					]
+				},
+				{
+					"Permission": "tag:GetResources",
+					"UseCases": [
+						"Used to get resource tags"
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "CloudDiscoveryS3RefreshSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "s3:ListAllMyBuckets",
+					"UseCases": [
+						"Used to discover S3 buckets"
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "CloudDiscoveryDynamoDBRefreshSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "dynamodb:ListTables",
+					"UseCases": [
+						"Listing all DynamoDB tables."
+					]
+				},
+				{
+					"Permission": "dynamodb:DescribeTable",
+					"UseCases": [
+						"Describing DynamoDB table properties."
+					]
+				},
+				{
+					"Permission": "dynamodb:ListTagsOfResource",
+					"UseCases": [
+						"Listing tags associated with DynamoDB resource."
+					]
+				},
+				{
+					"Permission": "dynamodb:DescribeTimeToLive",
+					"UseCases": [
+						"Describing Time to Live settings of a DynamoDB table."
+					]
+				},
+				{
+					"Permission": "dynamodb:DescribeGlobalTable",
+					"UseCases": [
+						"Describing a DynamoDB global table."
+					]
+				},
+				{
+					"Permission": "dynamodb:DescribeGlobalTableSettings",
+					"UseCases": [
+						"Describing settings of a DynamoDB global table."
+					]
+				},
+				{
+					"Permission": "dynamodb:DescribeContinuousBackups",
+					"UseCases": [
+						"Describing continuous backup settings of a DynamoDB table."
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		},
+		{
+			"Sid": "CloudDiscoveryDescribeRegionsSid",
+			"Effect": "Allow",
+			"Action": [
+				{
+					"Permission": "ec2:DescribeRegions",
+					"UseCases": [
+						"Used to discover available AWS regions"
+					]
+				}
+			],
+			"Resource": [
+				"*"
+			]
+		}
+	],
+	"Version": "2012-10-17"
+}
