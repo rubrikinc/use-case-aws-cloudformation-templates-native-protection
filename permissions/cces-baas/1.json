@@ -1,0 +1,122 @@
+{
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ssm:SendCommand",
+          "UseCases": [
+            "Install Rubrik Backup Agent on customer hosts opted into AWS Database Workload Protection via AWS Systems Manager run-command."
+          ]
+        }
+      ],
+      "Resource": ["arn:*:ec2:*:*:instance/*"],
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/rubrik:backup": "true"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ssm:SendCommand",
+          "UseCases": [
+            "Invoke AWS-managed run-script documents (e.g. AWS-RunShellScript, AWS-RunPowerShellScript)."
+          ]
+        },
+        {
+          "Permission": "ssm:GetDocument",
+          "UseCases": [
+            "Fetch the run-script document body to compose the install invocation."
+          ]
+        }
+      ],
+      "Resource": ["arn:*:ssm:*:*:document/*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ssm:DescribeInstanceInformation",
+          "UseCases": [
+            "Check whether the SSM agent on a tagged EC2 instance is online before issuing SendCommand."
+          ]
+        },
+        {
+          "Permission": "ssm:GetConnectionStatus",
+          "UseCases": [
+            "Check SSM session-manager connectivity for a target instance."
+          ]
+        },
+        {
+          "Permission": "ssm:GetCommandInvocation",
+          "UseCases": [
+            "Poll a specific RBA install command-invocation for outcome and stdout."
+          ]
+        },
+        {
+          "Permission": "ssm:ListCommandInvocations",
+          "UseCases": [
+            "Discover RBA install invocations when a specific command ID is lost on the Rubrik side."
+          ]
+        },
+        {
+          "Permission": "ssm:ListCommands",
+          "UseCases": [
+            "List recently-issued RBA install commands for reconciliation."
+          ]
+        }
+      ],
+      "Resource": ["*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:CreateVpcEndpoint",
+          "UseCases": [
+            "Create customer-side VPC endpoint for PrivateLink to Rubrik-hosted CCES NLB."
+          ]
+        }
+      ],
+      "Resource": ["*"],
+      "Condition": {
+        "StringEquals": {
+          "aws:RequestTag/rubrik:cces-baas": "true"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:DeleteVpcEndpoints",
+          "UseCases": [
+            "Tear down Rubrik-created VPC endpoints at CCES BaaS deprovisioning."
+          ]
+        }
+      ],
+      "Resource": ["arn:*:ec2:*:*:vpc-endpoint/*"],
+      "Condition": {
+        "Null": {
+          "aws:ResourceTag/rubrik:cces-baas": "false"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        {
+          "Permission": "ec2:DescribeVpcEndpoints",
+          "UseCases": [
+            "Verify state of Rubrik-created VPC endpoints."
+          ]
+        }
+      ],
+      "Resource": ["*"]
+    }
+  ],
+  "Version": "2012-10-17"
+}
